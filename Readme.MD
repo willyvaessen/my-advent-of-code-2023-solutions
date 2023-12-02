@@ -16,3 +16,7 @@ writing them back to a file and use that file as input for my code that solved p
 
 ## --- Day 2: Cube Conundrum ---
 
+Part 1 of day 2 has taken me almost all my free time today, but I managed to get it done.
+Part 2 on the other hand, proved to be a lot easier.
+
+
