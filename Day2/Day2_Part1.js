@@ -57,9 +57,9 @@ What is the sum of the IDs of those games?
 //  First get the input:
 const fs = require('fs');
 // const INPUT = fs.readFileSync('./Day2_Input', 'utf-8').split('\n');
-// const INPUT = fs.readFileSync('./Day2_Example_Input', 'utf-8').split('\n');
-const INPUT = 'Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green'; //  One line only, to test.
-console.log(INPUT);
+const INPUT = fs.readFileSync('./Day2_Example_Input', 'utf-8').split('\n');
+// const INPUT = 'Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green'; //  One line only, to test.
+// console.log(INPUT);
 
 //  The amount of cubes in the bag:
 // const RED = 12;
@@ -76,58 +76,53 @@ const impossibleGames = [];
 
 //  Each line of input, is a separate game. Each game has the same structure
 //      Each line starts with the game ID (Game <int>:
-const colonIndex = INPUT.indexOf(':');
-console.log(": is positioned at index " + colonIndex);
-let gameID = INPUT.slice(5, colonIndex);
-console.log("The game ID is: " + gameID);
-console.log("----------------------------------------")
-console.log(INPUT.slice(colonIndex + 1, INPUT.length));
-console.log("----------------------------------------")
-const games = INPUT.slice(colonIndex + 1, INPUT.length).split(';');
-console.log("Games detected: " + games);
-console.log(games);
 
-console.log(games.length);
-console.log(games[1].trim());
-for (let g = 0; g < games.length; g++) {
-    const gameDetail = (games[g].trim().split(','));
-// console.log("----------------------------------------")
-// console.log("-- Game Details ------------------------")
-// console.log("----------------------------------------")
-// console.log(gameDetail);
-// console.log(gameDetail[0].trim());
-// console.log(gameDetail[1].trim());
-// console.log(gameDetail[2].trim());
-//  This is the deepest level of the game, but we can go one bit deeper and split based on color.
-// console.log("----------------------------------------")
-// console.log("-- Cube Details ------------------------")
-// console.log("----------------------------------------")
-    for (let c = 0; c < gameDetail.length; c++) {
-        let cubeDetail = gameDetail[c].trim().split(' ');
-        // console.log(cubeDetail)
-        // console.log("Cube Detail: Color: " + cubeDetail[1] + ": " + cubeDetail[0]);
-        checkGame[cubeDetail[1]] = parseInt(cubeDetail[0]);
+function getGameInfo(INPUT) {
+    const colonIndex = INPUT.indexOf(':');
+    console.log(": is positioned at index " + colonIndex);
+    let gameID = INPUT.slice(5, colonIndex);
+    console.log("The game ID is: " + gameID);
+    console.log("----------------------------------------")
+    console.log(INPUT.slice(colonIndex + 1, INPUT.length));
+    console.log("----------------------------------------")
+    const gameSets = INPUT.slice(colonIndex + 1, INPUT.length).split(';');
+    console.log("Sets detected: " + gameSets);
+    console.log(gameSets);
+}
 
-    }
-    // console.log("Contents of this game is: ")
-    // console.log(checkGame)
-    checkPossibility(checkGame, bag);
+for (let i=0; i < INPUT.length; i++) {
+    getGameInfo(INPUT[i]);
 }
 
 
+//
+// console.log("Number of games: " + games.length);
+// for (let i = 0; i < games.length; i++) {
+//     console.log(games[i].trim());
+//     for (let g = 0; g < games.length; g++) {
+//         const gameDetail = (games[g].trim().split(','));
+//         for (let c = 0; c < gameDetail.length; c++) {
+//             let cubeDetail = gameDetail[c].trim().split(' ');
+//             // console.log(cubeDetail)
+//             // console.log("Cube Detail: Color: " + cubeDetail[1] + ": " + cubeDetail[0]);
+//             checkGame[cubeDetail[1]] = parseInt(cubeDetail[0]);
+//
+//         }
+//         // console.log("Contents of this game is: ")
+//         // console.log(checkGame)
+//
+//     }
+//     checkPossibility(checkGame, bag);
+// }
+
+
 function checkPossibility(checkGame, bag) {
-    // console.log("Contents of the bag is: ");
-    // console.log(bag);
-    // console.log("Game to check is");
-    // console.log(checkGame);
     if (checkGame['red'] >= bag['red'] || checkGame['green'] >= bag['green'] || checkGame['blue'] >= bag['blue']) {
         console.log("Game " + gameID + " is impossible.")
-        possibleGames.add(gameID);
     } else {
         console.log("Game " + gameID + " is possible")
     }
 }
 
-console.log(possibleGames.size);
 
 // checkPossibility(checkGame, bag);
