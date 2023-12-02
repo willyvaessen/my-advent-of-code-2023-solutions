@@ -9,4 +9,10 @@ in the upcoming months.
 
 ## --- Day 1: Trebuchet?! ---
 
-At first glance, this first day seems pretty straightforward.
+At first glance, this first day seems pretty straightforward and it turned out to be quite doable in part 1.
+Part 2 of the first day was a lot more challenging, but I ended up solving it by handling the input strings, 
+writing them back to a file and use that file as input for my code that solved part 1.
+
+
+## --- Day 2: Cube Conundrum ---
+
