@@ -56,8 +56,8 @@ What is the sum of the IDs of those games?
 
 //  First get the input:
 const fs = require('fs');
-// const INPUT = fs.readFileSync('./Day2_Input', 'utf-8').split('\n');
-const INPUT = fs.readFileSync('./Day2_Example_Input', 'utf-8').split('\n');
+const INPUT = fs.readFileSync('./Day2_Input', 'utf-8').split('\n');
+// const INPUT = fs.readFileSync('./Day2_Example_Input', 'utf-8').split('\n');
 // const INPUT = 'Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green'; //  One line only, to test.
 // console.log(INPUT);
 
@@ -65,13 +65,13 @@ const INPUT = fs.readFileSync('./Day2_Example_Input', 'utf-8').split('\n');
 // const RED = 12;
 // const GREEN = 13;
 // const BLUE = 14;
-
+let sumIDs = 0;
 const bag = {'red': 12, 'green': 13, 'blue': 14};
-const checkGame = {'red': 0, 'green': 0, 'blue': 0};
+// const checkGame = {'red': 0, 'green': 0, 'blue': 0};
 
 //  Declaring two arrays, to store the game ID's of possible and impossible games:
 const possibleGames = new Set();
-const impossibleGames = [];
+const impossibleGames = new Set();
 
 
 //  Each line of input, is a separate game. Each game has the same structure
@@ -79,50 +79,114 @@ const impossibleGames = [];
 
 function getGameInfo(INPUT) {
     const colonIndex = INPUT.indexOf(':');
-    console.log(": is positioned at index " + colonIndex);
+    // console.log(": is positioned at index " + colonIndex);
     let gameID = INPUT.slice(5, colonIndex);
-    console.log("The game ID is: " + gameID);
-    console.log("----------------------------------------")
-    console.log(INPUT.slice(colonIndex + 1, INPUT.length));
-    console.log("----------------------------------------")
+    // console.log("The game ID is: " + gameID);
+    // console.log("----------------------------------------")
+    // console.log(INPUT.slice(colonIndex + 1, INPUT.length));
+    // console.log("----------------------------------------")
     const gameSets = INPUT.slice(colonIndex + 1, INPUT.length).split(';');
-    console.log("Sets detected: " + gameSets);
-    console.log(gameSets);
+    // console.log("Sets detected: " + gameSets);
+    // console.log(gameSets);
+
+    const organizedGameSets = organizeGameSets(gameSets);
+    // console.log(organizedGameSets);
+    return {'Game': gameID, organizedGameSets};
 }
 
-for (let i=0; i < INPUT.length; i++) {
-    getGameInfo(INPUT[i]);
-}
+
+// console.log("Number of games: " + gameSets.length);
+function organizeGameSets(gameSets) {
+    const organizedGameSets = new Set();
+    // console.log("Running function organizeGameSets");
+    // console.log(gameSets);
+    // for (let i = 0; i < gameSets.length; i++) {
+    // console.log(gameSets[i].trim());
+    for (let g = 0; g < gameSets.length; g++) {
+        // console.log("--- Game Sets --------------------------");
+        // console.log("Length: " + gameSets.length);
+        // console.log(gameSets);
+        const gameDetail = (gameSets[g].trim().split(','));
+        // console.log("--- Clearing CheckGame object ----------")
+        const checkGame = {'red': 0, 'green': 0, 'blue': 0};
+        // console.log("--- Game Details -----------------------")
+        // console.log(gameDetail);
+        // console.log(checkGame);
+        // console.log("----------------------------------------")
+        for (let c = 0; c < gameDetail.length; c++) {
+            // console.log(gameDetail[c]);
+            let cubeDetail = gameDetail[c].trim().split(' ');
+            // console.log(cubeDetail)
+            // console.log("Cube Detail: Color: " + cubeDetail[1] + ": " + cubeDetail[0]);
+            // console.log("--- Check Game Details ----------------")
+            // console.log(checkGame);
+            // console.log("--- Updating Game Details --------------");
+
+            checkGame[cubeDetail[1]] = parseInt(cubeDetail[0]);
+            // console.log("--- Updated Game Details ---------------");
+            // console.log(checkGame);
+            // console.log("----------------------------------------");
+            organizedGameSets.add(checkGame);
+        }
+        // console.log("Contents of this is: ")
 
 
-//
-// console.log("Number of games: " + games.length);
-// for (let i = 0; i < games.length; i++) {
-//     console.log(games[i].trim());
-//     for (let g = 0; g < games.length; g++) {
-//         const gameDetail = (games[g].trim().split(','));
-//         for (let c = 0; c < gameDetail.length; c++) {
-//             let cubeDetail = gameDetail[c].trim().split(' ');
-//             // console.log(cubeDetail)
-//             // console.log("Cube Detail: Color: " + cubeDetail[1] + ": " + cubeDetail[0]);
-//             checkGame[cubeDetail[1]] = parseInt(cubeDetail[0]);
-//
-//         }
-//         // console.log("Contents of this game is: ")
-//         // console.log(checkGame)
-//
-//     }
-//     checkPossibility(checkGame, bag);
+    }
+    return organizedGameSets;
+    // checkPossibility(checkGame, bag);
 // }
+}
 
 
-function checkPossibility(checkGame, bag) {
-    if (checkGame['red'] >= bag['red'] || checkGame['green'] >= bag['green'] || checkGame['blue'] >= bag['blue']) {
-        console.log("Game " + gameID + " is impossible.")
-    } else {
-        console.log("Game " + gameID + " is possible")
+function checkPossibility(games) {
+    console.log("Checking the games to see if they are possible.");
+
+    // console.log(typeof games);
+    for (let i = 0; i < games.length; i++) {
+        const game = games[i];
+// Check if the game is already in either set
+        if (possibleGames.has(game.Game) || impossibleGames.has(game.Game)) {
+            continue; // Skip processing if the game is already categorized
+        }
+
+        let isPossible = true;
+
+        game.organizedGameSets.forEach(organizedGameSet => {
+            Object.keys(organizedGameSet).forEach(color => {
+                if (organizedGameSet[color] > bag[color]) {
+                    // The set makes it impossible
+                    isPossible = false;
+                }
+            });
+        });
+        if (isPossible) {
+            // If all sets make it possible, add to possibleGames
+            possibleGames.add(game.Game);
+        } else {
+            // If at least one set makes it impossible, add to impossibleGames
+            impossibleGames.add(game.Game);
+        }
     }
 }
 
 
-// checkPossibility(checkGame, bag);
+//  Running the app:
+const games = [];
+for (let i = 0; i < INPUT.length; i++) {
+    games.push(getGameInfo(INPUT[i]));
+}
+// console.log("----------------------------------------");
+// console.log("--- Games ------------------------------");
+// console.log("----------------------------------------");
+// console.log(games.length);
+checkPossibility(games);
+console.log(possibleGames);
+
+
+//  Now to calculate the sum of the ID's of the possible games.
+possibleGames.forEach(gameID => {
+    // console.log(gameID);
+    sumIDs += parseInt(gameID);
+});
+
+console.log("The final answer is: " + sumIDs);
