@@ -20,3 +20,5 @@ Part 1 of day 2 has taken me almost all my free time today, but I managed to get
 Part 2 on the other hand, proved to be a lot easier.
 
 
+## --- Day 3: Gear Ratios ---
+
