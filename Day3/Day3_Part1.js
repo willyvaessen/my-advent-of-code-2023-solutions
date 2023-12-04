@@ -1,10 +1,10 @@
 //  First get the input:
 const fs = require('fs');
-// const INPUT = fs.readFileSync('./Day3_Input', 'utf-8').split('\n');
-const INPUT = fs.readFileSync('./Day3_Input_Example', 'utf-8').split('\n');
+const INPUT = fs.readFileSync('./Day3_Input', 'utf-8').split('\n');
+// const INPUT = fs.readFileSync('./Day3_Input_Example', 'utf-8').split('\n');
 const SYMBOLS = ['-', '%', '+', '=', '*', '/', '$', '&', '#', '@']
 //  I'll use the following regular expression, to discover all numbers in the INPUT file.
-const NUMBERS_REGEX = /\b\d{1,3}\b/g;
+const NUMBERS_REGEX = /\b\d{1,4}\b/g;
 // console.log(INPUT);
 const coords = [];
 const adjacentValues = [];
@@ -45,7 +45,7 @@ function getNumberIndex(matchedNumbers, INPUT) {
                 // console.log("Number: " + INPUT[lineNumber][partNumberStart] + " from INPUT")
                 // console.log("Partnumber is " + partNumber);
                 // console.log("Line: " + lineNumber);
-                console.log("Start:     " + partNumberStart);
+                // console.log("Start:     " + partNumberStart);
                 // console.log("Length:    " + partNumberLength);
                 // console.log("End:       " + (partNumberStart + partNumberLength -1) );
 
@@ -117,7 +117,7 @@ function checkNeighbors(coords) {
             // console.log(`Part ${partNumber} has no possible neighbors above.`);
         } else {
             for (let i = colStart - 1; i <= colEnd + 1; i++) {
-                if (i >= 0 && i < colMax) {
+                if (i >= 0 && i <= colMax) {
                     let currentValue = INPUT[partLine - 1][i];
                     // console.log(currentValue);
                     neighbors.push(currentValue);
@@ -131,7 +131,7 @@ function checkNeighbors(coords) {
             // console.log(`Part ${partNumber} has no possible neighbors below.`);
         } else {
             for (let i = colStart - 1; i <= colEnd + 1; i++) {
-                if (i >= 0 && i < colMax) {
+                if (i >= 0 && i <= colMax) {
                     let currentValue = INPUT[partLine + 1][i];
                     // console.log(currentValue);
                     neighbors.push(currentValue);
@@ -177,10 +177,10 @@ for (let i = 0; i < adjacentValues.length; i+=2) {
     const partNumber = adjacentValues[i];
     const neighbors = adjacentValues[i + 1];
     // console.log(neighbors);
-    console.log(`Checking neighbors for part ${partNumber}:`)
+    // console.log(`Checking neighbors for part ${partNumber}:`)
     for (let j = 0; j < neighbors.length; j++) {
         // console.log(validPart);
-        console.log(neighbors[j]);
+        // console.log(neighbors[j]);
         if (SYMBOLS.includes(neighbors[j])){
             // validPart = true;
             validParts.push(partNumber);
@@ -192,7 +192,7 @@ for (let i = 0; i < adjacentValues.length; i+=2) {
 }
 
 // console.log(validParts.length);
-console.log(validParts);
+// console.log(validParts);
 // console.log(invalidParts.length);
 // console.log(invalidParts);
 
@@ -205,6 +205,21 @@ function calculateSumOfPartnumbers(validParts) {
     }return sum
 }
 
-console.log(matchedNumbers.length);
-console.log("Final Answer is:")
-console.log(calculateSumOfPartnumbers(validParts));
+// console.log(matchedNumbers.length);
+// console.log(matchedNumbers[0]);
+// console.log("Final Answer is:")
+// console.log(calculateSumOfPartnumbers(validParts));
+function writeArrayToFile(array){
+    const fs = require('fs');
+    const dataToWrite = array;
+    const outputPath = './Day3_Output_2';
+    // Convert the array to a string (you can customize this based on your data structure)
+const dataString = dataToWrite.map(item => JSON.stringify(item)).join('\n');
+
+// Write the string to a file
+fs.writeFileSync(outputPath, dataString);
+
+console.log(`Data written to ${outputPath}`);
+}
+console.log(coords);
+// writeArrayToFile(coords)
