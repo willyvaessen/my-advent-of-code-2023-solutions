@@ -202,16 +202,16 @@ const correctedSEEDS = [];
 
 for (let i=0; i < SEEDS.length; i += 2){
     console.log(SEEDS[i]);
-    let initialSeed = SEEDS[i];
+    let initialSeed = BigInt(SEEDS[i]);
     let seedsRange = SEEDS[i + 1];
     // console.log(`Seed ${initialSeed} is followed by ${seedsRange} additional seeds.`);
     // console.log(initialSeed);
     for (let j = 0; j < seedsRange; j++){
 
         // console.log(`Seed ${initialSeed} ${j}`);
-        // console.log(initialSeed);
-        correctedSEEDS.push(parseInt(initialSeed));
-        initialSeed++;
+        console.log(typeof initialSeed);
+        // correctedSEEDS.push(parseInt(BigInt(initialSeed)));
+        // initialSeed++;
     }
 }
 
