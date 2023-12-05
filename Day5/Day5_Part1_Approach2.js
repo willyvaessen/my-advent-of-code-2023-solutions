@@ -1,7 +1,7 @@
 //  First get the input:
 const fs = require('fs');
-// const INPUT = fs.readFileSync('./Day5_Input', 'utf-8').split('\n');
-const INPUT = fs.readFileSync('./Day5_Input_Example', 'utf-8').split('\n');
+const INPUT = fs.readFileSync('./Day5_Input', 'utf-8').split('\n');
+// const INPUT = fs.readFileSync('./Day5_Input_Example', 'utf-8').split('\n');
 // console.log(INPUT);  //  Just testing if INPUT logs correctly.
 
 //  Declaring consts for the various maps:
@@ -170,147 +170,29 @@ getMaps(INPUT);
 // let seed = SEEDS[0];
 
 //  Now that we have a seed, let's go through the first map to find the soils
-function findSoil(seed) {
+function findDestination(source, map) {
     let destination = 0;
-    // console.log(`Finding soil for seed ${seed}`);
-    //  The Soil array has a number of lines. Each line must be searched to find the source for our seed.
-    for (let i = 0; i < seedToSoil.length; i++) {
-        // console.log(`Looking in line ${i} at first seed ${parseInt(seedToSoil[i].Source)}`);
-        let indexToSearch = (seed - seedToSoil[i].Source);
-        // console.log(`Index is ${indexToSearch}`);
-        if ((indexToSearch >= 0) && indexToSearch < seedToSoil[i].Length) {
-            console.log(`Seed ${seed} should be found in line ${i}`);
-            // console.log(`Seed ${seed} / ${parseInt(seedToSoil[i].Source) + indexToSearch} corresponds to ${parseInt(seedToSoil[i].Destination) + indexToSearch}`);
-            destination = parseInt(seedToSoil[i].Destination) + indexToSearch;
-            // soilFound.push(destination);
+    for (let i = 0; i < map.length; i++) {
+        let indexToSearch = (source - map[i].Source);
+        if ((indexToSearch >= 0) && indexToSearch < map[i].Length) {
+            destination = parseInt(map[i].Destination) + indexToSearch;
+            return destination;
         } else {
-            // console.log(`Seed ${seed} can't be found in line ${i}.`);
-            destination = parseInt(seed);
-            destinationNotFound.push({"Seed": seed, "Line": i});
+            destination = parseInt(source);
         }
     }
-    soilFound.push(destination);
+    return destination;
 }
 
-//  Next, let's find the fertilizer destinations
-
-function findFertilizer(soil) {
-    let destination = 0;
-    // console.log(`Finding fertilizer for soil ${soil}`);
-    //  The Soil array has a number of lines. Each line must be searched to find the source for our seed.
-    for (let i = 0; i < soilToFertilizer.length; i++) {
-        // console.log(`Looking in line ${i} at first seed ${parseInt(seedToSoil[i].Source)}`);
-        let indexToSearch = (soil - soilToFertilizer[i].Source);
-        // console.log(`Index is ${indexToSearch}`);
-        if ((indexToSearch >= 0) && indexToSearch < soilToFertilizer[i].Length) {
-            console.log(`Seed ${soil} should be found in line ${i}`);
-            // console.log(`Seed ${soil} / ${parseInt(soilToFertilizer[i].Source) + indexToSearch} corresponds to ${parseInt(soilToFertilizer[i].Destination) + indexToSearch}`);
-            destination = parseInt(soilToFertilizer[i].Destination) + indexToSearch;
-            // fertilizerFound.push(destination);
-        } else {
-            // console.log(`Seed ${soil} can't be found in line ${i}.`);
-            destination = soil;
-            // destinationNotFound.push({"Seed": soil, "Line": i});
-
-        }
-    }
-    fertilizerFound.push(destination);
-}
-
-
-//  Next, let's find the water destinations
-function findWater(fertilizer) {
-    let destination = 0;
-    console.log(`Finding water for fertilizer source ${fertilizer}`);
-    //  The Soil array has a number of lines. Each line must be searched to find the source for our seed.
-    for (let i = 0; i < fertilizerToWater.length; i++) {
-        console.log("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
-        console.log(`Looking in line ${i} at first fertilizer ${parseInt(fertilizerToWater[i].Source)}`);
-        let indexToSearch = (fertilizer - fertilizerToWater[i].Source);
-        console.log(`Index is ${indexToSearch}`);
-        console.log(`Length of map is ${fertilizerToWater[i].Length}`)
-        if ((indexToSearch >= 0) && indexToSearch < fertilizerToWater[i].Length) {
-            console.log(`Seed ${fertilizer} should be found in line ${i}`);
-            console.log(`Seed ${fertilizer} / ${parseInt(fertilizerToWater[i].Source) + indexToSearch} corresponds to ${parseInt(fertilizerToWater[i].Destination) + indexToSearch}`);
-            destination = parseInt(fertilizerToWater[i].Destination) + indexToSearch;
-            // waterFound.push(destination);
-        } else {
-            console.log(`Seed ${fertilizer} can't be found in line ${i}.`);
-            destination = fertilizer;
-
-            // destinationNotFound.push({"Seed": soil, "Line": i});
-
-        }
-    }
-    waterFound.push(destination);
-}
-
-
-// function navigate(source, destination) {
-//     let dest = 0;
-//     console.log(`Finding soil for seed ${source}`);
-//     console.log(destination);
-//     console.log(destination[0].Source)
-//     //  The Soil array has a number of lines. Each line must be searched to find the source for our seed.
-//     for (let i = 0; i < destination.length; i++) {
-//         console.log(`--- Run ${i+1} ---`)
-//         console.log(`Source is ${source}, which is a ${typeof source}`)
-//         console.log(typeof destination[i].Source)
-//         console.log(`Looking in line ${i} at first seed ${destination[i].Source}`);
-//         let indexToSearch = (parseInt(source) - destination[i].Source);
-//         console.log(`Index is ${indexToSearch}`);
-//         if ((indexToSearch > 0) && (indexToSearch <= destination[i].Length)) {
-//             console.log(`Seed ${source} should be found in line ${i}`);
-//             console.log(`Seed ${source} / ${parseInt(destination[i].Source) + indexToSearch} corresponds to ${parseInt(destination[i].Destination) + indexToSearch}`);
-//             destination = parseInt(destination[i].Destination) + indexToSearch;
-//         } else {
-//             console.log(`Seed ${source} can't be found in line ${i}.`);
-//             destination = source;
-//         }
-//     }
-//     return dest
-// }
-
-
-// let destination = navigate(seed, seedToSoil);
-//
-console.log("--- Starting Program ---")
-// console.log(findSoil(seed));
-// console.log(destination)
-console.log("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ");
-console.log("-- Seed sources --");
-console.log(SEEDS);
-console.log("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ");
-console.log("");
-console.log("-- Finding Soil Destinations --")
 for (let i = 0; i < SEEDS.length; i++) {
     let seed = SEEDS[i];
-    // console.log(seed)
-    findSoil(seed);
+    let locationFound = findDestination(findDestination(findDestination(findDestination(findDestination(findDestination(findDestination(seed, seedToSoil), soilToFertilizer), fertilizerToWater), waterToLight), lightToTemperature), temperatureToHumidity), humidityToLocation);
+    locationsFound.push(locationFound);
+    console.log(`Location for seed ${seed} is ${locationFound}`);
 }
-console.log("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ");
-console.log("");
-console.log("--- Soil Destinations found ---")
-console.log(soilFound);
-console.log("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ");
-console.log("");
-console.log("-- Finding Fertilizer Destinations --")
-for (let i = 0; i < soilFound.length; i++) {
-    let soil = soilFound[i];
-    // console.log(soil);
-    findFertilizer(soil);
-}
-console.log("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ");
-console.log("--- Fertilizer Destinations found ---")
-console.log(fertilizerFound);
-
-console.log("-- Finding Water Destinations --")
-for (let i = 0; i < fertilizerFound.length; i++) {
-    let fertilizer = fertilizerFound[i];
-    findWater(fertilizer);
-}
-console.log("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ");
-console.log("--- Water Destinations found ---")
-console.log(waterFound);
 
 
+console.log("** Results **");
+console.log(locationsFound);
+
+console.log(Math.min(...locationsFound));
