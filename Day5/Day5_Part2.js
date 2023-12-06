@@ -1,4 +1,5 @@
 //  First get the input:
+const { log } = require('console');
 const fs = require('fs');
 const INPUT = fs.readFileSync('./Day5_Input', 'utf-8').split('\n');
 // const INPUT = fs.readFileSync('./Day5_Input_Example', 'utf-8').split('\n');
@@ -194,34 +195,108 @@ function findDestination(source, map) {
 //     // console.log(`Location for seed ${seed} is ${locationFound}`);
 // }
 
-// const correctedSEEDS = [];
-// console.log(SEEDS[0]);
-// console.log(SEEDS[1]);
-// console.log(SEEDS[2]);
-// console.log(SEEDS[3]);
-// let nearestLocation = 0;
-for (let i=0; i < SEEDS.length; i += 2){
-    // console.log(SEEDS[i]);
-    let initialSeed = parseInt(SEEDS[i]);
-    let additionalSeeds = parseInt(SEEDS[i + 1]);
-    // console.log(`First seed in the range is ${initialSeed}, followed by ${additionalSeeds} additional seeds.`);
-    // while (initialSeed <= additionalSeeds) {
-    //     console.log(initialSeed);
-    //     initialSeed++;
-    //     console.log(initialSeed);
-    // }
-    for (let i = 0; i < additionalSeeds; i++){
-        // console.log(`Working with seed ${initialSeed}`);
-        let location  = findDestination(findDestination(findDestination(findDestination(findDestination(findDestination(findDestination(initialSeed, seedToSoil), soilToFertilizer), fertilizerToWater), waterToLight), lightToTemperature), temperatureToHumidity), humidityToLocation);
-        // console.log(`Found location ${location}`);
-        // console.log(`Original location is ${nearestLocation}`);
+// let initialSeed = parseInt(SEEDS[18]);
+//     let additionalSeeds = parseInt(SEEDS[19]);
+// console.log(initialSeed);
+// console.log(additionalSeeds);
 
-        locationsFound.push(location);
+/* Pair 1
+1636419363
+608824189
+*/
+/* Pair 2
+3409451394
+227471750
+*/
+/* Pair 3
+12950548
+91466703
+*/
+/* Pair 4
+1003260108
+224873703
+*/
+/* Pair 5
+440703838
+191248477
+*/
+/* Pair 6
+634347552
+275264505
+*/
+/* Pair 7
+3673953799
+67839674
+*/
+/* Pair 8
+2442763622
+237071609
+*/
+/* Pair 9
+3766524590
+426344831
+*/
+/* Pair 10
+1433781343
+153722422
+*/
 
-        initialSeed++;
-    }
 
-}
+let nearestLocation = 309796150;
+
+let seed = 440703840;
+let location = findDestination(findDestination(findDestination(findDestination(findDestination(findDestination(findDestination(seed, seedToSoil), soilToFertilizer), fertilizerToWater), waterToLight), lightToTemperature), temperatureToHumidity), humidityToLocation);
+
+
+
+console.log("** Results **");
+// console.log(locationsFound);
+console.log(nearestLocation);
+console.log(location);
+
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// for (let i=0; i < SEEDS.length; i += 2){
+//     // console.log(SEEDS[i]);
+//     let initialSeed = 3409451394;
+//     let additionalSeeds = 227471750;
+//     // console.log(`First seed in the range is ${initialSeed}, followed by ${additionalSeeds} additional seeds.`);
+//     // while (initialSeed <= additionalSeeds) {
+//     //     console.log(initialSeed);
+//     //     initialSeed++;
+//     //     console.log(initialSeed);
+//     // }
+//     for (let i = 0; i < additionalSeeds; i+= 1000){
+//         // console.log(`Working with seed ${initialSeed}`);
+//         let location  = findDestination(findDestination(findDestination(findDestination(findDestination(findDestination(findDestination(initialSeed, seedToSoil), soilToFertilizer), fertilizerToWater), waterToLight), lightToTemperature), temperatureToHumidity), humidityToLocation);
+//         // console.log(`Found location ${location}`);
+//         // console.log(`Original location is ${nearestLocation}`);
+//         if (location < nearestLocation) {
+//             console.log(`The location ${location} found is closer than the previous nearest location ${nearestLocation}. Updating nearestLocation`)
+//             nearestLocation = location
+//         } else {
+//             console.log("Not yet. " + i)
+//         }
+//         // locationsFound.push(location);
+
+//         initialSeed++;
+//     }
+
+// }
 
 
 //
@@ -236,6 +311,4 @@ for (let i=0; i < SEEDS.length; i += 2){
 
 
 
-console.log("** Results **");
-console.log(locationsFound);
-//
+
