@@ -1,7 +1,7 @@
 //  First get the input:
 const fs = require('fs');
-// const INPUT = fs.readFileSync('./Day5_Input', 'utf-8').split('\n');
-const INPUT = fs.readFileSync('./Day5_Input_Example', 'utf-8').split('\n');
+const INPUT = fs.readFileSync('./Day5_Input', 'utf-8').split('\n');
+// const INPUT = fs.readFileSync('./Day5_Input_Example', 'utf-8').split('\n');
 // console.log(INPUT);  //  Just testing if INPUT logs correctly.
 
 //  Declaring consts for the various maps:
@@ -18,15 +18,15 @@ const lightToTemperature = [];
 const temperatureToHumidity = [];
 const humidityToLocation = [];
 
-const soilFound = [];
-const fertilizerFound = [];
-const waterFound = [];
-const lightFound = [];
-const temperatureFound = [];
-const humidityFound = [];
+// const soilFound = [];
+// const fertilizerFound = [];
+// const waterFound = [];
+// const lightFound = [];
+// const temperatureFound = [];
+// const humidityFound = [];
 const locationsFound = [];
 
-const destinationNotFound = [];
+// const destinationNotFound = [];
 
 // console.log(INPUT[2]);
 
@@ -188,44 +188,54 @@ function findDestination(source, map) {
 }
 
 // for (let i = 0; i < SEEDS.length; i++) {
-//     let seed = SEEDS[i];
+//     let seed = 440703838+191248477;//   SEEDS[i];
 //     let locationFound = findDestination(findDestination(findDestination(findDestination(findDestination(findDestination(findDestination(seed, seedToSoil), soilToFertilizer), fertilizerToWater), waterToLight), lightToTemperature), temperatureToHumidity), humidityToLocation);
 //     locationsFound.push(locationFound);
 //     // console.log(`Location for seed ${seed} is ${locationFound}`);
 // }
 
-const correctedSEEDS = [];
+// const correctedSEEDS = [];
 // console.log(SEEDS[0]);
 // console.log(SEEDS[1]);
 // console.log(SEEDS[2]);
 // console.log(SEEDS[3]);
-
+// let nearestLocation = 0;
 for (let i=0; i < SEEDS.length; i += 2){
-    console.log(SEEDS[i]);
-    let initialSeed = BigInt(SEEDS[i]);
-    let seedsRange = SEEDS[i + 1];
-    // console.log(`Seed ${initialSeed} is followed by ${seedsRange} additional seeds.`);
-    // console.log(initialSeed);
-    for (let j = 0; j < seedsRange; j++){
+    // console.log(SEEDS[i]);
+    let initialSeed = parseInt(SEEDS[i]);
+    let additionalSeeds = parseInt(SEEDS[i + 1]);
+    // console.log(`First seed in the range is ${initialSeed}, followed by ${additionalSeeds} additional seeds.`);
+    // while (initialSeed <= additionalSeeds) {
+    //     console.log(initialSeed);
+    //     initialSeed++;
+    //     console.log(initialSeed);
+    // }
+    for (let i = 0; i < additionalSeeds; i++){
+        // console.log(`Working with seed ${initialSeed}`);
+        let location  = findDestination(findDestination(findDestination(findDestination(findDestination(findDestination(findDestination(initialSeed, seedToSoil), soilToFertilizer), fertilizerToWater), waterToLight), lightToTemperature), temperatureToHumidity), humidityToLocation);
+        // console.log(`Found location ${location}`);
+        // console.log(`Original location is ${nearestLocation}`);
 
-        // console.log(`Seed ${initialSeed} ${j}`);
-        console.log(typeof initialSeed);
-        // correctedSEEDS.push(parseInt(BigInt(initialSeed)));
-        // initialSeed++;
+        locationsFound.push(location);
+
+        initialSeed++;
     }
-}
 
-console.log(correctedSEEDS.length);
-
-for (let i = 0; i < correctedSEEDS.length; i++) {
-    let seed = correctedSEEDS[i];
-    let locationFound = findDestination(findDestination(findDestination(findDestination(findDestination(findDestination(findDestination(seed, seedToSoil), soilToFertilizer), fertilizerToWater), waterToLight), lightToTemperature), temperatureToHumidity), humidityToLocation);
-    locationsFound.push(locationFound);
-    // console.log(`Location for seed ${seed} is ${locationFound}`);
 }
 
 
-// console.log("** Results **");
-// console.log(locationsFound);
 //
-// console.log(Math.min(...locationsFound));
+// for (let i = 0; i < correctedSEEDS.length; i++) {
+//     let seed = 1636419363; //   correctedSEEDS[i];
+//     let locationFound = findDestination(findDestination(findDestination(findDestination(findDestination(findDestination(findDestination(seed, seedToSoil), soilToFertilizer), fertilizerToWater), waterToLight), lightToTemperature), temperatureToHumidity), humidityToLocation);
+//     locationsFound.push(locationFound);
+//     // console.log(`Location for seed ${seed} is ${locationFound}`);
+// }
+
+// console.log(1636419363 > Number.MAX_SAFE_INTEGER);
+
+
+
+console.log("** Results **");
+console.log(locationsFound);
+//
