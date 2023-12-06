@@ -22,3 +22,27 @@ Part 2 on the other hand, proved to be a lot easier.
 
 ## --- Day 3: Gear Ratios ---
 
+I still haven't been able to finish this day. My code works with the example data, 
+but I can't get it to work with the actual input and I'm not sure where to look.
+
+
+## --- Day 4: Scratchcards ---
+
+The first part was quite easy to do (took me less than 6 hours) but for the second part I need some more time.
+
+
+## --- Day 5: If You Give A Seed A Fertilizer ---
+
+Much to my own surprise, the approach I took ended up working by the end of the day. For part 1 that is.
+Part 2 has taken me a lot of time, mostly waiting for my computer to finish finding the answer.
+I'm sure there's a more efficient way to solve it, but I haven't found it.
+
+
+## --- Day 6: Wait For It ---
+
+Looking at the title for today, it makes it all the more typical that I solved day 6 while waiting for my computer to 
+find the answer to part 2 of day 5. This one was a breeze. It might have taken me more time to figure out if I 
+understood the assignment than I needed to solve the actual puzzle. 
+I might rewrite my code to automate it all the way.
+
+
