@@ -1,21 +1,21 @@
 //  First get the input:
 const fs = require('fs');
-// const INPUT = fs.readFileSync('./Day7_Input', 'utf-8').split('\n');
-const INPUT = fs.readFileSync('./Day7_Input_Example', 'utf-8').split('\n');
+const INPUT = fs.readFileSync('./Day7_Input', 'utf-8').split('\n');
+// const INPUT = fs.readFileSync('./Day7_Input_Example', 'utf-8').split('\n');
 const DECK = {
     'A': 13,
     'K': 12,
     'Q': 11,
-    'J': 10,
-    'T': 9,
-    '9': 8,
-    '8': 7,
-    '7': 6,
-    '6': 5,
-    '5': 4,
-    '4': 3,
-    '3': 2,
-    '2': 1
+    'T': 10,
+    '9': 9,
+    '8': 8,
+    '7': 7,
+    '6': 6,
+    '5': 5,
+    '4': 4,
+    '3': 3,
+    '2': 2,
+    'J': 1,
 }
 // console.log(INPUT);
 const HANDS = [];
@@ -71,14 +71,94 @@ function getHighestCount(handCount) {
     return maxCount;
 }
 
+function getHighestCountWithJokers(handCount) {
+    // Find the entry with the lowest count
+    let maxCount = 1;
+    let maxCard = null;
+
+    // Iterate over the keys of the cardCount object
+    for (const card in handCount) {
+        if (handCount[card] > maxCount) {
+            maxCount = handCount[card];
+            console.log("");
+            console.log("++++++++++")
+            console.log(`Card is: ${card}`);
+            console.log("==========")
+            maxCard = card;
+        } else if (handCount[card] === maxCount) {
+            maxCard = card;
+        }
+    }
+    // console.log(`Card with the highest count: ${maxCard} (${maxCount} occurrences)`);
+    // console.log(handCount);
+    return [maxCard, maxCount];
+}
+
+
+function handleJokers(hand) {
+    let joker = hand.J;
+    // console.log(hand);
+    if (joker === undefined) {
+        console.log(`No Jokers in this hand.`);
+    } else {
+        console.log(`Number of jokers in this hand is ${joker}`);
+        let maxCard = getHighestCountWithJokers(hand)[0];
+        let highestCount = getHighestCountWithJokers(hand)[1];
+        // console.log(maxCard, getHighestCountWithJokers);
+        // console.log("");
+        // console.log("|**----------|");
+        // console.log(hand[maxCard]);
+        // console.log("|----------|");
+        // console.log("*** Updating amount of highest card:")
+        if (hand.J === 5) {
+            // console.log("*** Updating amount of highest card:")
+            hand[maxCard] += hand.J;
+            // hand.J = 0;
+            // delete hand['J'];
+            // console.log("|----------|");
+            // console.log(hand[maxCard]);
+            // console.log("|----------|");
+        } else {
+            console.log("__________");
+            console.log(hand);
+            console.log(maxCard);
+            console.log("**********");
+            console.log("");
+            console.log("");
+            hand[maxCard] += hand.J;
+            hand.J = 0;
+            delete hand['J'];
+            // console.log("|----------|");
+            // console.log(hand[maxCard]);
+            // console.log("|----------|");
+
+        }
+    }
+
+    console.log("##########");
+    console.log(hand);
+    console.log("**********");
+    console.log("");
+    console.log("");
+    return hand;
+}
+
+
 function getHandType(hand) {
+    // console.log("*** Getting Hand Types ***");
     let handCount = [];
     const HAND = hand.hand;
     let handType = '';
     let typeRank = 0;
     let amount = 0;
-    // console.log("*** Getting the hand type ***");
+    // console.log("*** Getting the hand count ***");
+    // console.log(HAND);
     handCount = countCards(HAND)
+    // console.log(handCount);
+
+    // console.log("Handling the Jokers in the hand");
+    handleJokers(handCount);
+    // console.log("***----------***----------***");
     const handCountSize = Object.keys(handCount).length;
     // console.log(`The hand ${HAND} contains the ${handCountSize} unique cards.`);
     // console.log(`Checking the hand type of hand ${HAND}.`)
@@ -126,9 +206,6 @@ function getHandType(hand) {
 }
 
 
-// getHandType(splitHands(INPUT));
-
-
 function main() {
     console.log("*** Running Program ***");
     // console.log(HANDS);
@@ -139,6 +216,9 @@ function main() {
 
 //  Run the program
 main();
+console.log()
+
+
 for (let i = 0; i < HANDS.length; i++) {
     let currentHand = HANDS[i];
     // console.log(currentHand)
@@ -150,26 +230,26 @@ for (let i = 0; i < HANDS.length; i++) {
 }
 
 const handsSortedByType = HANDS.sort((a, b) => {
-  // Compare by typeRank
-  if (a.typeRank !== b.typeRank) {
-    return a.typeRank - b.typeRank;
-  }
-
-  // If typeRank is the same, compare by hand using DECK order
-  const compareHands = (handA, handB) => {
-    for (let i = 0; i < Math.min(handA.length, handB.length); i++) {
-      const rankA = DECK[handA[i]];
-      const rankB = DECK[handB[i]];
-
-      if (rankA !== rankB) {
-        return rankA - rankB;
-      }
+    // Compare by typeRank
+    if (a.typeRank !== b.typeRank) {
+        return a.typeRank - b.typeRank;
     }
 
-    return handA.length - handB.length;
-  };
+    // If typeRank is the same, compare by hand using DECK order
+    const compareHands = (handA, handB) => {
+        for (let i = 0; i < Math.min(handA.length, handB.length); i++) {
+            const rankA = DECK[handA[i]];
+            const rankB = DECK[handB[i]];
 
-  return compareHands(a.hand, b.hand);
+            if (rankA !== rankB) {
+                return rankA - rankB;
+            }
+        }
+
+        return handA.length - handB.length;
+    };
+
+    return compareHands(a.hand, b.hand);
 });
 
 console.log(handsSortedByType);
@@ -177,7 +257,7 @@ let totalWinnings = 0;
 
 console.log("*** Final Answer:")
 for (let i = 0; i < handsSortedByType.length; i++) {
-    let rank = i+1;
+    let rank = i + 1;
     let bid = handsSortedByType[i].bidAmount;
     let winning = rank * bid;
     // console.log(`Index ${i}, rank ${rank}, ${bid}. Winning is ${rank} x ${bid} = ${winning}`);
@@ -185,4 +265,9 @@ for (let i = 0; i < handsSortedByType.length; i++) {
 
 }
 console.log("*** Final Answer:")
-    console.log(totalWinnings);
+console.log(totalWinnings);
+
+//  Not:
+//  249785241 (too high)
+//  250015282 (too high)
+//  249620106

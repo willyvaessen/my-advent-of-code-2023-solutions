@@ -46,3 +46,43 @@ understood the assignment than I needed to solve the actual puzzle.
 I might rewrite my code to automate it all the way.
 
 
+## --- Day 7: Camel Cards ---
+
+We're playing a kind of poker game today.
+Comparing hands, ranking them and finding the total score.
+
+With the addition of Jokers in the second part of the day.
+
+
+
+
+function handleJokers(hand) {
+    let joker = hand.J;
+    // console.log(hand);
+    if (joker === undefined) {
+        // console.log(`No Jokers in this hand.`);
+    } else {
+        // console.log(`Number of jokers in this hand is ${joker}`);
+        let maxCard = getHighestCountWithJokers(hand)[0];
+        let highestCount = getHighestCountWithJokers(hand)[1];
+        // console.log(maxCard, getHighestCountWithJokers);
+        // console.log("");
+        // console.log("|**----------**|");
+        // console.log(hand[maxCard]);
+        // console.log("|----------|");
+        // console.log(typeof hand.J);
+        // console.log(hand.J === 5);
+        if (!hand.J === 5) {
+            // console.log("*** Updating amount of highest card:")
+        hand[maxCard] += hand.J;
+        hand.J = 0;
+        delete hand['J'];
+        // console.log("|----------|");
+        // console.log(hand[maxCard]);
+        // console.log("|----------|");
+        }
+
+    }
+    console.log(hand);
+    return hand;
+}
