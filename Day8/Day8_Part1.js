@@ -11,19 +11,25 @@ const INSTR = [];
 const NETWORK = [];
 
 function populateInstructions(input) {
-    for (let i = 0; i < input[0].length; i++) {
-        INSTR.push(input[0].split('')[i]);
+    for (let j = 0; j < INPUT.length; j++) {            //  This loops through the INPUT file, to make sure that there are enough instructions to follow all steps.
+        for (let i = 0; i < input[0].length; i++) { //  This loops through the instructions line of the input
+            INSTR.push(input[0].split('')[i]);
+        }
     }
     console.log("...");
     console.log("Instructions added.");
-    console.log(INSTR);
+    // console.log(INSTR);
 }
 
 function populateNetwork(input) {
     for (let i = 2; i < INPUT.length; i++) {
         const node = input[i];
         let dstString = (node.split('=')[1]).trim();
-        NETWORK.push({Source: (node.split('=')[0]).trim(), l_Dest: (dstString.split(',')[0]).slice(1, 4), r_Dest: (dstString.split(',')[1].trim()).slice(0, 3)});
+        NETWORK.push({
+            Source: (node.split('=')[0]).trim(),
+            l_Dest: (dstString.split(',')[0]).slice(1, 4),
+            r_Dest: (dstString.split(',')[1].trim()).slice(0, 3)
+        });
     }
     console.log("...");
     console.log("Network map populated.");
