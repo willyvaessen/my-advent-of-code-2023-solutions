@@ -1,14 +1,20 @@
 from math import gcd
 
-steps, _, *rest = open('Day8_Input').read().splitlines()
+steps, _, *rest = open('Day8_Input_Example').read().splitlines()
 
 network = {}
+print(steps)            # Output: LR
 
 for line in rest:
     pos, targets = line.split(" = ")
     network[pos] = targets[1:-1].split(", ")
 
 positions = [key for key in network if key.endswith("A")]
+
+print(network)          # Output: {'11A': ['11B', 'XXX'], '11B': ['XXX', '11Z'], '11Z': ['11B', 'XXX'], '22A': [
+# '22B', 'XXX'], '22B': ['22C', '22C'], '22C': ['22Z', '22Z'], '22Z': ['22B', '22B'], 'XXX': ['XXX', 'XXX']}
+
+print(positions)        # Output: ['11A', '22A']
 
 
 cycles =[]
@@ -37,15 +43,15 @@ for current in positions:
 
     cycles.append(cycle)
 
-print(cycles)
+print(cycles)       # Output is [[2, 2], [3, 3]]
 
 nums = [cycle[0] for cycle in cycles]
 
-print(nums)
+# print(nums)
 
 lcm = nums.pop()
 
 for num in nums:
     lcm = lcm * num // gcd(lcm, num)
 
-print(lcm)
+# print(lcm)
