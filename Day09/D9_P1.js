@@ -45,49 +45,22 @@ function getPrediction(collection) {
     // console.log(run)
     let valueToAdd;
     while (run > 0) {
-        // console.log(collection[run]);
-        // console.log(`This collection has a length of ${collection[run].length}`);
-        //  Check to see if all values are 0
         if (collection[run].every(value => value === 0)) {
             valueToAdd = 0;
-            // console.log(`All values are 0. Adding a zero to the end.`);
             collection[run].push(valueToAdd);
-            // console.log(collection[run]);
-            // console.log(collection[run].length);
-
         } else {
-            // console.log("We'll do something else.");
             let currentLastValue = collection[run][collection[run].length - 1];
             valueToAdd = collection[run + 1][collection[run + 1].length - 1] + currentLastValue;
-            // console.log(`Last value in this collection is ${currentLastValue}. Value to add is ${valueToAdd}.`);
             collection[run].push(valueToAdd);
         }
-
         run--;
     }
-    // console.log(`Original collection for run ${run} is:`);
-    // console.log(collection[run]);
     let currentLastValue = collection[run][collection[run].length - 1];
-    // console.log(`Last value in this collection is ${currentLastValue}`);
     valueToAdd = collection[run + 1][collection[run + 1].length - 1] + currentLastValue;
-    // console.log(`Last value in this collection is ${currentLastValue}. Value to add is ${valueToAdd}.`);
     collection[run].push(valueToAdd);
     let predictedValue = collection[run][collection[run].length-1];
-
-
-    // collection[run].push(0);
-    // // console.log(collection[run].indexOf(0))
-    // console.log(collection[run][4]);
-    // console.log(collection[run])
-    // collection[run -1].push('A')
-    // console.log(collection[run -1][collection[run -1].length-1])
-    // collection[run -2].push('B')
-    // console.log(collection[run -1][collection[run -2].length-1])
-    // console.log(collection)
-    // console.log(`Prediction is: ${predictedValue}.`)
     sumOfExtraPolatedValues += predictedValue;
 }
-
 
 function handleSingleLine(line) {
     allZeros = false;
@@ -123,6 +96,7 @@ function main() {
 }
 
 
-main();
-// handleSingleLine(2);
+// main();
+
+handleSingleLine(2);
 console.log(sumOfExtraPolatedValues);
