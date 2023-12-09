@@ -1,12 +1,13 @@
 //  First get the input:
 const fs = require('fs');
-// const INPUT = fs.readFileSync('./Day9_Input', 'utf-8').split('\n');
-const INPUT = fs.readFileSync('./Day9_Input_Example', 'utf-8').split('\n');
+const INPUT = fs.readFileSync('./Day9_Input', 'utf-8').split('\n');
+// const INPUT = fs.readFileSync('./Day9_Input_Example', 'utf-8').split('\n');
 // console.log(INPUT);  //  Just testing if INPUT logs correctly.
 // const sequence = INPUT[0].split(' ');
 let run = 0;
 let allZeros = false;
 let sumOfExtraPolatedValues = 0;
+let sumOfPreviousValues = 0;
 
 function createFirstCollection(array) {
     const collection = {};
@@ -62,6 +63,35 @@ function getPrediction(collection) {
     sumOfExtraPolatedValues += predictedValue;
 }
 
+
+
+function getPreviousValue(collection) {
+    // console.log(collection);
+    // console.log(run)
+    let valueToAddInFront;
+    while (run > 0) {
+        if (collection[run].every(value => value === 0)) {
+            valueToAddInFront = 0;
+            collection[run].unshift(valueToAddInFront);
+            console.log(`Added value ${valueToAddInFront} to the front of collection `);
+            console.log(collection[run]);
+        } else {
+            let currentFirstValue = collection[run][0];
+            valueToAddInFront = currentFirstValue - collection[run + 1][0];
+            console.log(`Value to add is now ${valueToAddInFront}`);
+            collection[run].unshift(valueToAddInFront);
+        }
+        run--;
+    }
+    let currentFirstValue = collection[run][0];
+    valueToAddInFront = currentFirstValue - collection[run + 1][0];
+    collection[run].unshift(valueToAddInFront);
+    let predictedPreviousValue = collection[run][0];
+    console.log(`Predicted value to store at the beginning of run ${run} is ${predictedPreviousValue}`);
+    sumOfPreviousValues += predictedPreviousValue;
+}       //  Function for part 2 of this day.
+
+
 function handleSingleLine(line) {
     allZeros = false;
     run = 0;
@@ -72,7 +102,8 @@ function handleSingleLine(line) {
     }
     // console.log(`Until this point (run ${run}) The following collections have been created. Now to work our way back up.`)
     // console.log(collection);
-    getPrediction(collection);
+    // getPrediction(collection);
+    getPreviousValue(collection);
 }
 
 
@@ -96,7 +127,8 @@ function main() {
 }
 
 
-// main();
+main();
 
-handleSingleLine(2);
+// handleSingleLine(2);
 console.log(sumOfExtraPolatedValues);
+console.log(sumOfPreviousValues);
