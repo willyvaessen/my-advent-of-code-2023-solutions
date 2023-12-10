@@ -66,19 +66,14 @@ function getPrediction(collection) {
 
 
 function getPreviousValue(collection) {
-    // console.log(collection);
-    // console.log(run)
     let valueToAddInFront;
     while (run > 0) {
         if (collection[run].every(value => value === 0)) {
             valueToAddInFront = 0;
             collection[run].unshift(valueToAddInFront);
-            console.log(`Added value ${valueToAddInFront} to the front of collection `);
-            console.log(collection[run]);
         } else {
             let currentFirstValue = collection[run][0];
             valueToAddInFront = currentFirstValue - collection[run + 1][0];
-            console.log(`Value to add is now ${valueToAddInFront}`);
             collection[run].unshift(valueToAddInFront);
         }
         run--;
@@ -87,7 +82,6 @@ function getPreviousValue(collection) {
     valueToAddInFront = currentFirstValue - collection[run + 1][0];
     collection[run].unshift(valueToAddInFront);
     let predictedPreviousValue = collection[run][0];
-    console.log(`Predicted value to store at the beginning of run ${run} is ${predictedPreviousValue}`);
     sumOfPreviousValues += predictedPreviousValue;
 }       //  Function for part 2 of this day.
 
@@ -100,8 +94,7 @@ function handleSingleLine(line) {
     while (!allZeros) {
         calcSteps(collection);
     }
-    // console.log(`Until this point (run ${run}) The following collections have been created. Now to work our way back up.`)
-    // console.log(collection);
+
     // getPrediction(collection);
     getPreviousValue(collection);
 }
@@ -110,18 +103,6 @@ function handleSingleLine(line) {
 function main() {
     for (let i = 0; i < INPUT.length; i++) {
         handleSingleLine(i);
-        // allZeros = false;
-        // run = 0;
-        // console.log(`Handling line ${i + 1} of the input`);
-        // const collection = createFirstCollection(INPUT[i].split(' '));
-        // // console.log(collection);
-        // while (!allZeros) {
-        //     calcSteps(collection);
-        // }
-        // console.log(`Until this point (run ${run} The following collections have been created. Now to work our way back up.`)
-        // console.log(collection);
-        // getPrediction(collection);
-
     }
     console.log("******************************");
 }
