@@ -2,11 +2,13 @@
 const fs = require('fs');
 // const INPUT = fs.readFileSync('./Day10_Input', 'utf-8').split('\n');
 const INPUT = fs.readFileSync('./Day10_Input_Example', 'utf-8').split('\n');
-console.log(INPUT);  //  Just testing if INPUT logs correctly.
+// console.log(INPUT);  //  Just testing if INPUT logs correctly.
+const OPPOSITE_DIRECTIONS = {'south': 'north', 'east': 'west', 'north': 'south', 'west': 'east'};
 let row;    //  The horizontal index of a value in the array
 let col;    //  The vertical index of a value in the array
 let coord = row + 'x' + col;    //  First locate the row, then the column
 let stepCounter = 0;
+let origin = '';
 
 //  First let's identify the starting point (S) location.
 function getStartCoord(grid) {
@@ -21,128 +23,133 @@ function getStartCoord(grid) {
         }
     }
     coord = row + 'x' + col;
-    console.log("****************************************");
-    console.log(`* Starting point is at coordinate ${coord}  *`);
-    console.log("****************************************");
-    console.log("");
+    // console.log("****************************************");
+    // console.log(`* Starting point is at coordinate ${coord}  *`);
+    // console.log("****************************************");
+    // console.log("");
     return coord
 }                       //  This funtion locates 'S' in the grid, which is the starting point.
+function getDirection(coord, origin) {
+    // console.log(`This function gets the direction we need to go, found on this coordinate ${coord}. Origin is ${origin}`)
+    let direction = 'Nog niet gedefinieerd.';
+    let startRow = parseInt(coord.split('x')[0]);
+    let startCol = parseInt(coord.split('x')[1]);
+    // console.log(`Ik begin op rij ${startRow} en kolom ${startCol}.`);
+    let instruction = INPUT[startRow][startCol];
+    // console.log(`Op die positie in de input vind ik de instructie: ${instruction}.`)
 
-function splitCoord(coord) {
-    // console.log(coord.length);
-    row = coord[0];
-    col = coord[2];
-    // console.log(`Row is ${row}, column is ${col}.`)
+    //  Als instructie = S, dan is het de eerste keer dat ik deze functie aanroep. Tijd om te bepalen waar we naartoe gaan.
+    if ((instruction === 'S') && (origin === undefined)) {
+        let topNeighbor = INPUT[startRow - 1][startCol];
+        let bottomNeighbor = INPUT[startRow + 1][startCol];
+        let leftNeighbor = INPUT[startRow][startCol - 1];
+        let rightNeighbor = INPUT[startRow][startCol + 1];
+        // console.log(`Up: ${topNeighbor}, Down: ${bottomNeighbor}, Left: ${leftNeighbor}, Right: ${rightNeighbor}.`);
+        if ((topNeighbor === 'F') || (topNeighbor === '|') || (topNeighbor === '7')) {
+            // console.log(`Instruction above is ${topNeighbor}, so the only way is up!!`);
+            direction = 'north';
+        } else if ((rightNeighbor === 'J') || (rightNeighbor === '-') || (rightNeighbor === '7')) {
+            // console.log(`Instruction below is ${rightNeighbor}, so the only way is down!!`);
+            direction = 'east';
+        } else if ((bottomNeighbor === 'L') || (bottomNeighbor === '|') || (bottomNeighbor === 'J')) {
+            // console.log(`Instruction below is ${bottomNeighbor}, so the only way is down!!`);
+            direction = 'south';
+        } else if ((leftNeighbor === 'F') || (leftNeighbor === '-') || (leftNeighbor === 'L')) {
+            // console.log(`Instruction below is ${leftNeighbor}, so the only way is down!!`);
+            direction = 'west';
+        } else {
+            console.log(`Can't move there from ${coord}.`)
+        }
+
+
+        // origin = direction;     //  assigning this to know where we came from.
+        // console.log(direction, origin);
+        return [coord, direction, origin];
+    }
 }
 
-//  Now that we know the starting location ('S') we can go in two directions.
 
-function getNextStep(start, direction) {
-    let dest;
-    //  Get the starting point split up:
-    let fromRow = parseInt(start[0]);
-    let fromCol = parseInt(start[2]);
-    let firstRow = 0;
-    let firstCol = 0;
-    let lastCol = INPUT[fromRow].length - 1;
-    let lastRow = INPUT.length - 1;
+function getDestination(input) {
+    // console.log(`Input received is ${input}`);
+    let start = input[0];
+    let direction = input[1];
+    let origin = input[2];
+    // console.log(`Coming from ${start}, we're heading to ${direction}`);
+    let startRow = parseInt(start.split('x')[0]);
+    let startCol = parseInt(start.split('x')[1]);
+    // console.log(startRow, startCol);
     let toRow;
     let toCol;
+    let destination;
+    switch (direction) {
+        case 'north':
+            // console.log("Heading north.");
+            toRow = startRow - 1;
+            toCol = startCol;
+            destination = toRow + 'x' + toCol;
+            break;
+        case 'south':
+            // console.log("Heading south.");
+            toRow = startRow + 1;
+            toCol = startCol;
+            destination = toRow + 'x' + toCol;
+            break;
+        case 'east':
+            // console.log("Heading east.");
+            toRow = startRow;
+            toCol = startCol + 1;
+            destination = toRow + 'x' + toCol;
+            break;
+        case 'west':
+            // console.log("Heading west.");
+            toRow = startRow;
+            toCol = startCol + 1;
+            destination = toRow + 'x' + toCol;
+            break;
 
-    if (direction === 'fw') {
-        //  If I want to move FORWARD from the starting point, I have to increase the COL position (so 1x1 becomes 1x2)
-        if (((fromRow < lastRow) && (fromCol < lastCol)) || ((fromCol === lastCol) && (fromRow < lastRow))) {
-            // console.log(`It's possible to move forward.`);
-            if (fromCol === lastCol) {
-                toCol = 0;
-                toRow = fromRow + 1;
-            } else {
-                toRow = fromRow;
-                toCol = fromCol + 1;
-            }
-            dest = toRow + 'x' + toCol;
-        } else {
-            console.log(`Impossible to move forward.`)
-        }
-        // console.log(`Moving FORWARD from ${start} to ${dest}.`);
-    } else if (direction === 'bw') {
-        //  If I want to move BACKWARD, I have to DECREASE the COL position (so 1x1 becomes 1x0)
-        if (((fromRow > firstRow) && (fromCol > firstCol)) || ((fromCol === firstCol) && (fromRow > firstRow))) {
-            // console.log(`It's possible to move backward.`);
-            if (fromCol === firstCol) {
-                toRow = fromRow - 1;
-                toCol = lastCol;
-            } else {
-                toRow = fromRow;
-                toCol = fromCol - 1;
-            }
-            dest = toRow + 'x' + toCol;
-        } else {
-            console.log(`Impossible to move backward.`)
-        }
-        // console.log(`Moving BACKWARD from ${start} to ${dest}.`);
-
-    } else {
-        console.log(`Direction ${direction} is not recognized, or something else is wrong. Can't proceed.`)
     }
-    console.log(`The next coordinate is ${dest}`);
-    return dest;
+    // console.log(destination, direction, origin);
+    return [destination, direction, origin];
 }
 
-function travel(start, direction) {
-    let from = start;
-    console.log(`Starting from ${start}, moving ${direction === 'fw' ? 'FORWARD' : 'BACKWARD'}.`);
-    console.log(stepCounter);
-    let nextStepCoord = getNextStep(from, direction);
-    console.log(nextStepCoord);
-    console.log(nextStepCoord[0])
-    console.log(nextStepCoord[2])
-    let nextStep = INPUT[nextStepCoord[0]][nextStepCoord[2]];
-    console.log(nextStep);
-    switch (nextStep) {
-        case '-':
-            console.log("Moving horizontal (E - W / W - E)");
-            break;
-        case '|':
-            console.log("Moving vertical (N - S / S - N)");
-            break;
-        case '7':
-            console.log("Connecting South and West");
-            break;
-        case 'J':
-            console.log("Connecting North and West");
-            break;
-        case 'L':
-            console.log("Connecting North and East ");
-            break;
-        case 'F':
-            console.log("Connecting South and East");
-            break;
-        case '.':
-            console.log("Hit ground, no pipe here.");
-            break;
-        case 'S':
-            console.log("Back at start");
-            break;
+function move(target) {
+    // console.log(`Target received is ${target}`);
+    let destination = target[0];
+    let direction = target[1];
+    // console.log(`Moving to destination ${destination}, heading ${direction}`);
+    let origin = direction;
 
-        default:
-            console.log(`That is unknown.`)
-    }
-
+    return [destination, direction, origin];
 }
-
 
 function main() {
-    console.log("****************************************");
+    // console.log("****************************************");
     console.log("*** Running the program              ***");
     console.log("****************************************");
     console.log("");
-    let startCoord = getStartCoord(INPUT);
-    // console.log(startCoord);
-    // getNextStep(startCoord, 'bw');
-    // splitCoord(startCoord);
-    travel(startCoord, 'fw');
+    let coord = getStartCoord(INPUT);
+    console.log(`Starting Point is ${coord}`);
+    let direction = getDirection(coord);
+    console.log(`Direction found: ${getDirection(coord)}`);
+    console.log(direction);
+    let destination = getDestination(getDirection(coord));
+    console.log(`Source is ${coord},  destination found: ${getDestination(getDirection(coord))}`)
+    // console.log(destination);
+    console.log(`Direction found is ${direction[0]}. Heading ${direction[1]}. Coming from ${direction[2]}`);
+    // move(destination);
+    coord = move(destination)[0];
+    console.log(coord);
+    console.log(stepCounter);
+    stepCounter++
+    coord = move(getDestination(getDirection(coord)));
+    console.log(coord);
+    console.log(stepCounter);
+    stepCounter++
+
 }
+
+//  Test Opposite Directions
+
 
 //  Run the program
 main();

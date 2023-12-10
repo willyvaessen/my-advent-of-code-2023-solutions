@@ -1,7 +1,7 @@
 //  First get the input:
 const fs = require('fs');
-const INPUT = fs.readFileSync('./Day3_Input', 'utf-8').split('\n');
-// const INPUT = fs.readFileSync('./Day3_Input_Example', 'utf-8').split('\n');
+// const INPUT = fs.readFileSync('./Day3_Input', 'utf-8').split('\n');
+const INPUT = fs.readFileSync('./Day3_Input_Example', 'utf-8').split('\n');
 const SYMBOLS = ['-', '%', '+', '=', '*', '/', '$', '&', '#', '@']
 //  I'll use the following regular expression, to discover all numbers in the INPUT file.
 const NUMBERS_REGEX = /\b\d{1,4}\b/g;
