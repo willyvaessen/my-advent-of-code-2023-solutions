@@ -94,7 +94,6 @@ function handleSingleLine(line) {
     while (!allZeros) {
         calcSteps(collection);
     }
-
     // getPrediction(collection);
     getPreviousValue(collection);
 }
