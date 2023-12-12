@@ -5,6 +5,7 @@ const INPUT = fs.readFileSync('./Day11_Input_Example', 'utf-8').split('\n');
 // console.log(INPUT)
 const galaxyMarker = '#';
 const galaxyMap = {};
+
 // Check the map for empty spaces
 function checkRows(targetValue) {
     const emptyRows = [];
@@ -132,6 +133,7 @@ function getGalaxyCount(universe) {
     }
     return galaxyCounter;
 }
+
 function getGalaxyMap(universe) {
     const numberOfGalaxies = getGalaxyCount(expandedUniverse);
     let galaxyCounter = 1;
@@ -149,11 +151,11 @@ function getGalaxyMap(universe) {
 getGalaxyMap(expandedUniverse);
 console.log(galaxyMap);
 
-function getGalaxyPairs(){
+function getGalaxyPairs() {
     const galaxies = [];
     const uniquePairs = [];
     const galaxyCount = getGalaxyCount(expandedUniverse);
-    for (let i = 1; i <= galaxyCount; i++){
+    for (let i = 1; i <= galaxyCount; i++) {
         galaxies.push(i);
     }
     // console.log(galaxies);
@@ -166,11 +168,30 @@ function getGalaxyPairs(){
     // console.log(uniquePairs);
     return uniquePairs;
 }
+
 const galaxyPairs = getGalaxyPairs();
 
 
-console.log(galaxyPairs);
+console.log(galaxyPairs[1][0]);
 
+function calculateDistance(pairs, map) {
+    let totalDistance = 0;
+    let pair = 5;
+    let from = pairs[pair][0];
+    let to = pairs[pair][1];
+
+
+    for (let pair = 0; pair < pairs.length; pair++) {
+        from = pairs[pair][0];
+        to = pairs[pair][1];
+        let distance = Math.abs(((map[to][1]) - (map[from][1]))) + Math.abs(((map[to][0]) - (map[from][0])));
+        console.log(`Distance is ${distance}`);
+        totalDistance += distance;
+    }
+    console.log(totalDistance);
+}
+
+calculateDistance(galaxyPairs, galaxyMap);
 
 // console.log(`The amount of galaxies in this universe is ${numberOfGalaxies}.`)
 
