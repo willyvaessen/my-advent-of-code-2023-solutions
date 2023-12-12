@@ -73,10 +73,21 @@ const emptyCols = checkColumns('.');
 console.log(emptyRows);
 console.log(emptyCols);
 
+//  The above code identifies those rows and columns that contain only '.' characters and adds those to a set of arrays.
+//  Next up is a way to "copy" each of these rows and insert that copy next to the existing ones.
+//  The approach that I used yesterday, didn't work (did not produce the output that it should and I think that is
+//  because of the fact that rows are actually strings.  So, my INPUT is an array of strings, rather than an actual
+//  multi-dimensional array.
+//  TODO: convert the INPUT array to an actual 2D array, by converting each row into an array.
 
 
 
 
+//  Once I have a true multi-dimensinal array, I can start working on "copying" those "empty" rows and columns.
+//  TODO: Figure out how to copy an entire row or column and insert it next to it's original.
+
+
+//  TODO: Remove below code snippets once above works.
 /*  My code, which is clearly not working so far.
 function insertExtraColumn(array) {
     const columnsWithAllDots = findColumnsWithAllDots(array);
@@ -196,3 +207,4 @@ function writeArrayToFile(array) {
 // writeArrayToFile(galaxyRowsExpanded);
 // writeArrayToFile(galaxyColsExpanded);
 */
+
