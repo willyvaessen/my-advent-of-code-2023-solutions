@@ -25,28 +25,59 @@ for (let col = 0; col < INPUT[0].length; col++) {
 //  END of Iteration Testing part
 //  ------------------------------------------------------------------------------------------------------------------*/
 
-//  Check the map for empty galaxies
-// function checkColumns(targetValue) {
-//     const emptyCols = [];
-//     for (let col = 0; col < INPUT[0].length; col++) {
-//         let allEqual = true;
-//
-//         for (let row = 0; row < INPUT.length; row++) {
-//             if (INPUT[row][col] !== targetValue) {
-//                 allEqual = false;
-//                 break; // Exit the loop early if a non-matching value is found
-//             }
-//         }
-//         if (allEqual) {
-//             // console.log(`All values in column ${col} are equal to '${targetValue}'.`);
-//             emptyCols.push(col);
-//         } else {
-//             // console.log(`Not all values in column ${col} are equal to '${targetValue}'.`);
-//         }
-//     }
-//     return emptyCols;
-// }
+ // Check the map for empty galaxies
+function checkRows(targetValue) {
+    const emptyRows = [];
+    for (let row = 0; row < INPUT.length; row++) {
+        let allEqual = true;
+        for (let col = 0; col < INPUT[row].length; col++) {
+            if (INPUT[row][col] !== targetValue) {
+                allEqual = false;
+                break; // Exit the loop early if a non-matching value is found
+            }
+        }
+        if (allEqual) {
+            // console.log(`All values in row ${row} are equal to '${targetValue}'.`);
+            emptyRows.push(row);
+        } else {
+            // console.log(`Not all values in row ${row} are equal to '${targetValue}'.`);
+        }
+    }
+    return emptyRows;
+}
+function checkColumns(targetValue) {
+    const emptyCols = [];
+    for (let col = 0; col < INPUT[0].length; col++) {
+        let allEqual = true;
 
+        for (let row = 0; row < INPUT.length; row++) {
+            if (INPUT[row][col] !== targetValue) {
+                allEqual = false;
+                break; // Exit the loop early if a non-matching value is found
+            }
+        }
+        if (allEqual) {
+            // console.log(`All values in column ${col} are equal to '${targetValue}'.`);
+            emptyCols.push(col);
+        } else {
+            // console.log(`Not all values in column ${col} are equal to '${targetValue}'.`);
+        }
+    }
+    return emptyCols;
+}
+
+const emptyRows = checkRows('.');
+const emptyCols = checkColumns('.');
+
+// Display the result
+console.log(emptyRows);
+console.log(emptyCols);
+
+
+
+
+
+/*  My code, which is clearly not working so far.
 function insertExtraColumn(array) {
     const columnsWithAllDots = findColumnsWithAllDots(array);
     console.log(columnsWithAllDots)
@@ -140,26 +171,10 @@ function expandRows(galaxy, emptyGalaxyRows) {
 //     return galaxy;
 // }
 
-// for (let col = 0; col < INPUT[0].length; col++) {
-//     for (let row = 0; row < INPUT.length; row++) {
-//         console.log(INPUT[row][col]);
-//     }
-// }
 
-
-// function expandCols(galaxy) {
-//     const emptyGalaxyCols = checkColumns(INPUT);
-//     const expandedGalaxy = [...galaxy];
-//     emptyGalaxyCols.forEach(columnIndex => {
-//         emptyGalaxyCols.forEach((row, rowIndex) => {
-//             emptyGalaxyCols[rowIndex] = [...row.slice(0, columnIndex + 1), 'A', ...row.slice(columnIndex + 1)];
-//         });
-//     });
-// return expandedGalaxy;
-// }
 
 let galaxyColsExpanded = rowsToStrings(insertExtraColumn(INPUT));
-let galaxyRowsExpanded = expandRows(galaxyColsExpanded, emptyGalaxyRows);
+// let galaxyRowsExpanded = expandRows(galaxyColsExpanded, emptyGalaxyRows);
 
 
 console.log(galaxyColsExpanded);
@@ -178,5 +193,6 @@ function writeArrayToFile(array) {
     console.log(`Data written to ${outputPath}`);
 }
 
-writeArrayToFile(galaxyRowsExpanded);
+// writeArrayToFile(galaxyRowsExpanded);
 // writeArrayToFile(galaxyColsExpanded);
+*/
