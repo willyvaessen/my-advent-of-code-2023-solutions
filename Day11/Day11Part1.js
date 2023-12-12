@@ -1,7 +1,7 @@
 //  First get the input:
 const fs = require('fs');
-const INPUT = fs.readFileSync('./Day11_Input', 'utf-8').split('\n');
-// const INPUT = fs.readFileSync('./Day11_Input_Example', 'utf-8').split('\n');
+// const INPUT = fs.readFileSync('./Day11_Input', 'utf-8').split('\n');
+const INPUT = fs.readFileSync('./Day11_Input_Example', 'utf-8').split('\n');
 // console.log(INPUT)
 const galaxyMarker = '#';
 const galaxyMap = {};
@@ -141,7 +141,7 @@ function getGalaxyMap(universe) {
         for (let col = 0; col < universe[row].length; col++) {
             if (universe[row][col] === galaxyMarker) {
                 // console.log(`Galaxy ${galaxyCounter} found at ${row}x${col}.`)
-                // fs.appendFileSync('map.txt', `Galaxy ${galaxyCounter} found at ${row}x${col}.\n`);
+                fs.appendFileSync('map.txt', `Galaxy ${galaxyCounter} found at ${row}x${col}.\n`);
                 galaxyMap[galaxyCounter] = [row, col];
                 galaxyCounter++;
             }
