@@ -98,17 +98,30 @@ function create2DArray(array) {
 }   //  Function to convert array to 2D array.
 
 
-const galaxy2D = create2DArray(INPUT);
-console.log(galaxy2D);
-
-
-
-
-
-
+// const galaxy2D = create2DArray(INPUT);
+// console.log(galaxy2D);
 
 //  Once I have a true multi-dimensinal array, I can start working on "copying" those "empty" rows and columns.
 //  TODO: Figure out how to copy an entire row or column and insert it next to it's original.
+
+//  Expand this galaxy's rows now.
+function expandRows(galaxy, emptyGalaxyRows) {
+    // console.log(`Expanding galaxy rows.`);
+    for (let i = emptyGalaxyRows.length - 1; i >= 0; i--) {     //  Iterate backwards thorugh this array.
+        let rowToExpand = parseInt(emptyGalaxyRows[i]);
+        let stringRowToAdd = '';
+        let newRow = rowToExpand + 1;
+        for (let col = 0; col < galaxy[rowToExpand].length; col++) {
+            stringRowToAdd += '.';
+        }
+        galaxy.splice(rowToExpand, 0, stringRowToAdd);
+    }
+    return galaxy;
+}       //  This function expands the '.' filled rows.
+
+
+const galaxyWithRowsExpanded = expandRows(INPUT, emptyRows);
+console.log(galaxyWithRowsExpanded);
 
 
 //  TODO: Remove below code snippets once above works.
@@ -127,50 +140,9 @@ function insertExtraColumn(array) {
     return newArray;
 }
 
-function findColumnsWithAllDots(array) {
-    const columnsWithAllDots = [];
 
-    for (let col = 0; col < array[0].length; col++) {
-        const allDots = array.every(row => row[col] === '.');
-        if (allDots) {
-            columnsWithAllDots.push(col);
-        }
-    }
 
-    return columnsWithAllDots;
-}
-function rowsToStrings(array){
-    let rowString = '';
-    const arrayOfStrings = [];
-    for (let i = 0; i < array.length; i++) {
-        rowString = '';
-        for (let j = 0; j < array[i].length; j++) {
-            rowString += array[i][j];
-        }
-        arrayOfStrings.push(rowString);
-    }
-    return arrayOfStrings
-}
 
-function checkRows(targetValue) {
-    const emptyRows = [];
-    for (let row = 0; row < INPUT.length; row++) {
-        let allEqual = true;
-        for (let col = 0; col < INPUT[row].length; col++) {
-            if (INPUT[row][col] !== targetValue) {
-                allEqual = false;
-                break; // Exit the loop early if a non-matching value is found
-            }
-        }
-        if (allEqual) {
-            // console.log(`All values in row ${row} are equal to '${targetValue}'.`);
-            emptyRows.push(row);
-        } else {
-            // console.log(`Not all values in row ${row} are equal to '${targetValue}'.`);
-        }
-    }
-    return emptyRows;
-}
 
 //  And add them to their respective arrays to use later on.
 const emptyGalaxyRows = checkRows('.');
@@ -191,7 +163,7 @@ function expandRows(galaxy, emptyGalaxyRows) {
 
 
 
-//  Expand this galaxy now.
+//  Expand this galaxy's rows now.
 // function expandRows(galaxy, emptyGalaxyRows) {
 //     // console.log(`Expanding galaxy rows.`)
 //     for (let i = 0; i < emptyGalaxyRows.length; i++) {
@@ -213,22 +185,18 @@ let galaxyColsExpanded = rowsToStrings(insertExtraColumn(INPUT));
 
 
 console.log(galaxyColsExpanded);
+*/
 
+
+//  Below function writes an array to a file, for comparison or checking.
 function writeArrayToFile(array) {
     const fs = require('fs');
     const dataToWrite = array;
     const outputPath = './Day11_Output_1';
 // Convert the array to a string without double quotes
     const dataString = dataToWrite.map(item => item.toString()).join('\n');
-
-
 // Write the string to a file
     fs.writeFileSync(outputPath, dataString);
-
     console.log(`Data written to ${outputPath}`);
-}
-
-// writeArrayToFile(galaxyRowsExpanded);
-// writeArrayToFile(galaxyColsExpanded);
-*/
-
+}       //  This function writes an array to a file.
+// writeArrayToFile(galaxyWithRowsExpanded);
