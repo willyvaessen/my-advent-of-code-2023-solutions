@@ -2,7 +2,7 @@
 const fs = require('fs');
 const INPUT = fs.readFileSync('./Day11_Input', 'utf-8').split('\n');
 // const INPUT = fs.readFileSync('./Day11_Input_Example', 'utf-8').split('\n');
-console.log(INPUT)
+// console.log(INPUT)
 
 let inputRowCol;
 let inputColRow;
@@ -25,7 +25,7 @@ for (let col = 0; col < INPUT[0].length; col++) {
 //  END of Iteration Testing part
 //  ------------------------------------------------------------------------------------------------------------------*/
 
- // Check the map for empty galaxies
+// Check the map for empty galaxies
 function checkRows(targetValue) {
     const emptyRows = [];
     for (let row = 0; row < INPUT.length; row++) {
@@ -45,6 +45,7 @@ function checkRows(targetValue) {
     }
     return emptyRows;
 }
+
 function checkColumns(targetValue) {
     const emptyCols = [];
     for (let col = 0; col < INPUT[0].length; col++) {
@@ -70,15 +71,38 @@ const emptyRows = checkRows('.');
 const emptyCols = checkColumns('.');
 
 // Display the result
-console.log(emptyRows);
-console.log(emptyCols);
+// console.log(emptyRows);
+// console.log(emptyCols);
 
 //  The above code identifies those rows and columns that contain only '.' characters and adds those to a set of arrays.
 //  Next up is a way to "copy" each of these rows and insert that copy next to the existing ones.
 //  The approach that I used yesterday, didn't work (did not produce the output that it should and I think that is
 //  because of the fact that rows are actually strings.  So, my INPUT is an array of strings, rather than an actual
 //  multi-dimensional array.
-//  TODO: convert the INPUT array to an actual 2D array, by converting each row into an array.
+function rowToArray(row) {
+    //  This function takes a row as input, and converts it an array.
+    //  That way, it turns an array with strings as rows into an actual 2D array.
+    const arrayFromRow = [];
+    for (let col = 0; col < row.length; col++) {
+        arrayFromRow.push(row[col]);
+    }
+    return arrayFromRow;
+}       //  Function to create an array out of a row (that is actually a string)
+function create2DArray(array) {
+    //  This function takes an array and converts it to a 2D Array, in which the rows are arrays as well.
+    const twoDArray = [];
+    for (let row = 0; row < INPUT.length; row++) {
+        twoDArray.push(rowToArray(INPUT[row]));
+    }
+    return twoDArray;
+}   //  Function to convert array to 2D array.
+
+
+const galaxy2D = create2DArray(INPUT);
+console.log(galaxy2D);
+
+
+
 
 
 
