@@ -1,31 +1,11 @@
 //  First get the input:
 const fs = require('fs');
-const INPUT = fs.readFileSync('./Day11_Input', 'utf-8').split('\n');
-// const INPUT = fs.readFileSync('./Day11_Input_Example', 'utf-8').split('\n');
+// const INPUT = fs.readFileSync('./Day11_Input', 'utf-8').split('\n');
+const INPUT = fs.readFileSync('./Day11_Input_Example', 'utf-8').split('\n');
 // console.log(INPUT)
-
-let inputRowCol;
-let inputColRow;
-
-/*  Iteration testing
-    Below are 2 loops, to test iterating over the 2D array in two ways. First row by row, then column by column.
-    They are not needed for the program itself.
-// ROW first, COL next
-for (let row = 0; row < INPUT.length; row++) {
-    for (let col = 0; col < INPUT[row].length; col++) {
-        console.log(INPUT[row][col]);
-    }
-}       //  Check row by row
-// COL first, ROW next (or at least, an attempt)
-for (let col = 0; col < INPUT[0].length; col++) {
-    for (let row = 0; row < INPUT.length; row++) {
-        console.log(INPUT[row][col]);
-    }
-}   //  Check column by column
-//  END of Iteration Testing part
-//  ------------------------------------------------------------------------------------------------------------------*/
-
-// Check the map for empty galaxies
+const galaxyMarker = '#';
+const galaxyMap = {};
+// Check the map for empty spaces
 function checkRows(targetValue) {
     const emptyRows = [];
     for (let row = 0; row < INPUT.length; row++) {
@@ -45,6 +25,7 @@ function checkRows(targetValue) {
     }
     return emptyRows;
 }
+
 function checkColumns(targetValue) {
     const emptyCols = [];
     for (let col = 0; col < INPUT[0].length; col++) {
@@ -69,6 +50,7 @@ function checkColumns(targetValue) {
 const emptyRows = checkRows('.');
 const emptyCols = checkColumns('.');
 
+
 function rowToArray(row) {
     //  This function takes a row as input, and converts it an array.
     //  That way, it turns an array with strings as rows into an actual 2D array.
@@ -87,38 +69,40 @@ function create2DArray(array) {
     return twoDArray;
 }   //  Function to convert array to 2D array.
 
-//  Expand this galaxy's rows now.
-function expandRows(galaxy, emptyGalaxyRows) {
-    for (let i = emptyGalaxyRows.length - 1; i >= 0; i--) {     //  Iterate backwards thorugh this array.
-        let rowToExpand = parseInt(emptyGalaxyRows[i]);
+//  Expand this universe's rows now.
+function expandRows(universe, emptyUniverseRows) {
+    for (let i = emptyUniverseRows.length - 1; i >= 0; i--) {     //  Iterate backwards thorugh this array.
+        let rowToExpand = parseInt(emptyUniverseRows[i]);
         let stringRowToAdd = '';
         let newRow = rowToExpand + 1;
-        for (let col = 0; col < galaxy[rowToExpand].length; col++) {
+        for (let col = 0; col < universe[rowToExpand].length; col++) {
             stringRowToAdd += '.';
         }
-        galaxy.splice(rowToExpand, 0, stringRowToAdd);
+        universe.splice(rowToExpand, 0, stringRowToAdd);
     }
-    return galaxy;
+    return universe;
 }       //  This function expands the '.' filled rows.
-const galaxyWithRowsExpanded = expandRows(INPUT, emptyRows);
+const universeWithRowsExpanded = expandRows(INPUT, emptyRows);
 
-function expandCols(galaxy, emptyGalaxyCols) {
-    const expandedGalaxy = [];
+function expandCols(universe, emptyUniverseCols) {
+    const expandedUniverse = [];
     let expandedRow = '';
     let finalExpandedRow = '';
-    for (let row = 0; row < galaxy.length; row++) {
-        let rowToExpand = galaxy[row];
-        // finalExpandedRow = expandRowWithColumns(rowToExpand, emptyGalaxyCols);
-        expandedGalaxy.push(expandRowWithColumns(rowToExpand, emptyGalaxyCols))
+    for (let row = 0; row < universe.length; row++) {
+        let rowToExpand = universe[row];
+        // finalExpandedRow = expandRowWithColumns(rowToExpand, emptyUniverseCols);
+        expandedUniverse.push(expandRowWithColumns(rowToExpand, emptyUniverseCols))
     }
-    return expandedGalaxy;
+    return expandedUniverse;
 }
+
 function insertColumn(rowToExpand, column) {
     let expandedRow = '';
     let characterToAdd = '.';
     expandedRow = rowToExpand.slice(0, column + 1) + characterToAdd + rowToExpand.slice(column + 1);
     return expandedRow;
 }
+
 function expandRowWithColumns(rowToExpand, columns) {
     let expandedRow = rowToExpand;
     //
@@ -126,16 +110,69 @@ function expandRowWithColumns(rowToExpand, columns) {
     //     expandedRow = insertColumn(expandedRow, columns[i]);
     // }
 
-        for (let i = columns.length -1; i >= 0 ; i--) {
+    for (let i = columns.length - 1; i >= 0; i--) {
         expandedRow = insertColumn(expandedRow, columns[i]);
     }
 
     return expandedRow;
 }
 
-const expandedGalaxy = expandCols(galaxyWithRowsExpanded, emptyCols);
-console.log(expandedGalaxy);
+const expandedUniverse = expandCols(universeWithRowsExpanded, emptyCols);
+// console.log(expandedUniverse);
 
+//  The code above seems to nicely expand the universe, so I can perform the rest of the tasks.
+function getGalaxyCount(universe) {
+    let galaxyCounter = 0;
+    for (let row = 0; row < universe.length; row++) {
+        for (let col = 0; col < universe[row].length; col++) {
+            if (universe[row][col] === galaxyMarker) {
+                galaxyCounter++;
+            }
+        }
+    }
+    return galaxyCounter;
+}
+function getGalaxyMap(universe) {
+    const numberOfGalaxies = getGalaxyCount(expandedUniverse);
+    let galaxyCounter = 1;
+    for (let row = 0; row < universe.length; row++) {
+        for (let col = 0; col < universe[row].length; col++) {
+            if (universe[row][col] === galaxyMarker) {
+                console.log(`Galaxy ${galaxyCounter} found at ${row}x${col}.`)
+                galaxyMap[galaxyCounter] = [row, col];
+                galaxyCounter++;
+            }
+        }
+    }
+}
+
+getGalaxyMap(expandedUniverse);
+console.log(galaxyMap);
+
+function getGalaxyPairs(){
+    const galaxies = [];
+    const uniquePairs = [];
+    const galaxyCount = getGalaxyCount(expandedUniverse);
+    for (let i = 1; i <= galaxyCount; i++){
+        galaxies.push(i);
+    }
+    // console.log(galaxies);
+    for (let i = 0; i < galaxies.length; i++) {
+        for (let j = i + 1; j < galaxies.length; j++) {
+            const pair = [galaxies[i], galaxies[j]];
+            uniquePairs.push(pair);
+        }
+    }
+    // console.log(uniquePairs);
+    return uniquePairs;
+}
+const galaxyPairs = getGalaxyPairs();
+
+
+console.log(galaxyPairs);
+
+
+// console.log(`The amount of galaxies in this universe is ${numberOfGalaxies}.`)
 
 function calculatePairs(numberOfGalaxies) {
     // Check if there are at least 2 galaxies for pairing
@@ -148,11 +185,9 @@ function calculatePairs(numberOfGalaxies) {
 }
 
 // Example usage
-const numberOfGalaxies = 9;
-const numberOfPairs = calculatePairs(numberOfGalaxies);
+// const numberOfPairs = calculatePairs(numberOfGalaxies);
 
-console.log(`With ${numberOfGalaxies} galaxies, there are ${numberOfPairs} pairs.`);
-
+// console.log(`With ${numberOfGalaxies} galaxies, there are ${numberOfPairs} pairs.`);
 
 
 //  Below function writes an array to a file, for comparison or checking.
@@ -166,4 +201,4 @@ function writeArrayToFile(array) {
     fs.writeFileSync(outputPath, dataString);
     console.log(`Data written to ${outputPath}`);
 }       //  This function writes an array to a file.
-writeArrayToFile(expandedGalaxy);
+// writeArrayToFile(expandedUniverse);
