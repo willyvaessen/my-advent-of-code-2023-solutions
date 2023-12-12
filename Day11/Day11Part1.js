@@ -45,7 +45,6 @@ function checkRows(targetValue) {
     }
     return emptyRows;
 }
-
 function checkColumns(targetValue) {
     const emptyCols = [];
     for (let col = 0; col < INPUT[0].length; col++) {
@@ -70,15 +69,6 @@ function checkColumns(targetValue) {
 const emptyRows = checkRows('.');
 const emptyCols = checkColumns('.');
 
-// Display the result
-// console.log(emptyRows);
-// console.log(emptyCols);
-
-//  The above code identifies those rows and columns that contain only '.' characters and adds those to a set of arrays.
-//  Next up is a way to "copy" each of these rows and insert that copy next to the existing ones.
-//  The approach that I used yesterday, didn't work (did not produce the output that it should and I think that is
-//  because of the fact that rows are actually strings.  So, my INPUT is an array of strings, rather than an actual
-//  multi-dimensional array.
 function rowToArray(row) {
     //  This function takes a row as input, and converts it an array.
     //  That way, it turns an array with strings as rows into an actual 2D array.
@@ -97,16 +87,8 @@ function create2DArray(array) {
     return twoDArray;
 }   //  Function to convert array to 2D array.
 
-
-// const galaxy2D = create2DArray(INPUT);
-// console.log(galaxy2D);
-
-//  Once I have a true multi-dimensinal array, I can start working on "copying" those "empty" rows and columns.
-//  TODO: Figure out how to copy an entire row or column and insert it next to it's original.
-
 //  Expand this galaxy's rows now.
 function expandRows(galaxy, emptyGalaxyRows) {
-    // console.log(`Expanding galaxy rows.`);
     for (let i = emptyGalaxyRows.length - 1; i >= 0; i--) {     //  Iterate backwards thorugh this array.
         let rowToExpand = parseInt(emptyGalaxyRows[i]);
         let stringRowToAdd = '';
@@ -118,74 +100,59 @@ function expandRows(galaxy, emptyGalaxyRows) {
     }
     return galaxy;
 }       //  This function expands the '.' filled rows.
-
-
 const galaxyWithRowsExpanded = expandRows(INPUT, emptyRows);
-console.log(galaxyWithRowsExpanded);
 
-
-//  TODO: Remove below code snippets once above works.
-/*  My code, which is clearly not working so far.
-function insertExtraColumn(array) {
-    const columnsWithAllDots = findColumnsWithAllDots(array);
-    console.log(columnsWithAllDots)
-    const newArray = [...array];
-
-    columnsWithAllDots.forEach(columnIndex => {
-        newArray.forEach((row, rowIndex) => {
-            newArray[rowIndex] = [...row.slice(0, columnIndex + 1), '.', ...row.slice(columnIndex + 1)];
-        });
-    });
-
-    return newArray;
-}
-
-
-
-
-
-//  And add them to their respective arrays to use later on.
-const emptyGalaxyRows = checkRows('.');
-// const emptyGalaxyCols = checkColumns('.');
-
-function expandRows(galaxy, emptyGalaxyRows) {
-    for (let i = 0; i < emptyGalaxyRows.length; i++) {
-        let rowToExpand = parseInt(emptyGalaxyRows[i]);
-
-        // Create a new row by adding a dot in the new column
-        let stringRowToAdd = galaxy[rowToExpand] + '.';
-
-        // Insert the new row at the specified position
-        galaxy.splice(rowToExpand, 0, stringRowToAdd);
+function expandCols(galaxy, emptyGalaxyCols) {
+    const expandedGalaxy = [];
+    let expandedRow = '';
+    let finalExpandedRow = '';
+    for (let row = 0; row < galaxy.length; row++) {
+        let rowToExpand = galaxy[row];
+        // finalExpandedRow = expandRowWithColumns(rowToExpand, emptyGalaxyCols);
+        expandedGalaxy.push(expandRowWithColumns(rowToExpand, emptyGalaxyCols))
     }
-    return galaxy;
+    return expandedGalaxy;
+}
+function insertColumn(rowToExpand, column) {
+    let expandedRow = '';
+    let characterToAdd = '.';
+    expandedRow = rowToExpand.slice(0, column + 1) + characterToAdd + rowToExpand.slice(column + 1);
+    return expandedRow;
+}
+function expandRowWithColumns(rowToExpand, columns) {
+    let expandedRow = rowToExpand;
+    //
+    // for (let i = 0; i < columns.length; i++) {
+    //     expandedRow = insertColumn(expandedRow, columns[i]);
+    // }
+
+        for (let i = columns.length -1; i >= 0 ; i--) {
+        expandedRow = insertColumn(expandedRow, columns[i]);
+    }
+
+    return expandedRow;
 }
 
+const expandedGalaxy = expandCols(galaxyWithRowsExpanded, emptyCols);
+console.log(expandedGalaxy);
 
 
-//  Expand this galaxy's rows now.
-// function expandRows(galaxy, emptyGalaxyRows) {
-//     // console.log(`Expanding galaxy rows.`)
-//     for (let i = 0; i < emptyGalaxyRows.length; i++) {
-//         let rowToExpand = parseInt(emptyGalaxyRows[i]);
-//         let stringRowToAdd = '';
-//         let newRow = rowToExpand + 1;
-//         for (let col = 0; col < galaxy[rowToExpand].length; col++) {
-//             stringRowToAdd += '.';
-//         }
-//         galaxy.splice(rowToExpand, 0, stringRowToAdd);
-//     }
-//     return galaxy;
-// }
+function calculatePairs(numberOfGalaxies) {
+    // Check if there are at least 2 galaxies for pairing
+    if (numberOfGalaxies < 2) {
+        return 0;
+    }
 
+    // Calculate the number of pairs using the formula
+    return (numberOfGalaxies * (numberOfGalaxies - 1)) / 2;
+}
 
+// Example usage
+const numberOfGalaxies = 9;
+const numberOfPairs = calculatePairs(numberOfGalaxies);
 
-let galaxyColsExpanded = rowsToStrings(insertExtraColumn(INPUT));
-// let galaxyRowsExpanded = expandRows(galaxyColsExpanded, emptyGalaxyRows);
+console.log(`With ${numberOfGalaxies} galaxies, there are ${numberOfPairs} pairs.`);
 
-
-console.log(galaxyColsExpanded);
-*/
 
 
 //  Below function writes an array to a file, for comparison or checking.
@@ -199,4 +166,4 @@ function writeArrayToFile(array) {
     fs.writeFileSync(outputPath, dataString);
     console.log(`Data written to ${outputPath}`);
 }       //  This function writes an array to a file.
-// writeArrayToFile(galaxyWithRowsExpanded);
+writeArrayToFile(expandedGalaxy);
