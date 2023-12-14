@@ -2,7 +2,7 @@
 const fs = require('fs');
 // const INPUT = fs.readFileSync('./Day13_Input', 'utf-8').split('\n');
 const INPUT = fs.readFileSync('./Day13_Input_Example', 'utf-8').split('\n');
-// console.log(INPUT);
+console.log(INPUT);
 let rowMirroredLines = 0;
 let colMirrorLine = 0;
 const multiplier = 100;
@@ -45,15 +45,21 @@ for (let pattern = 0; pattern < Object.keys(patterns).length; pattern++) {
     // console.log(`All rows are mirrored?: ${allRowsMirrored}`)
 
     compareRows(singlePattern, mirroredRow);
+    compareColumns(singlePattern, mirroredRow);
 
-
-    console.log(mirroredCol);
+    // console.log(mirroredCol);
 
     if (compareRows(singlePattern, findMirroredRow(singlePattern))) {
-        console.log(`Pattern is mirrored vertically, starting from row ${mirroredRow + 1}`);
+        // console.log(`Pattern is mirrored vertically, starting from row ${mirroredRow + 1}`);
         rowMirroredLines += (mirroredRow + 1);
     }
 
+    if (compareColumns(singlePattern, findMirroredColumn(singlePattern))) {
+        // console.log(`Pattern is mirrored horizontally, starting from column ${mirroredCol +1}`)
+        colMirrorLine += (mirroredCol + 1);
+    }
+
+    console.log(`Lines above: ${rowMirroredLines}, lines left ${colMirrorLine}`)
 
 }
 
@@ -71,21 +77,11 @@ function findMirroredRow(pattern) {
 
 function compareRows(pattern, row) {
     let allMirrored = true;
-    // console.log("----------");
-    // console.log(pattern[0]);
-    // console.log("----------");
     const topSideOfMirror = row;
     const bottomSideOfMirror = row + 1;
-    // console.log(`Equal rows are ${topSideOfMirror} and ${bottomSideOfMirror}`);
-    // console.log(`Length of pattern is ${pattern.length}`);
     let topSide = topSideOfMirror + 1;
     let bottomSide = pattern.length - bottomSideOfMirror;
-    // console.log(`Top: ${topSide} rows, Bottom: ${bottomSide} rows.`);
-    // console.log("");
-    // console.log("--------------------------");
-    // console.log(topSide);
-    // console.log(bottomSide);
-    //     console.log("--------------------------");
+
     for (let i = 0; i < (topSide > bottomSide ? bottomSide : topSide); i++) {
         // console.log(`Counting ${i} rows.`);
         // console.log(pattern[topSideOfMirror - i] === pattern[bottomSideOfMirror + i]);
@@ -99,13 +95,31 @@ function compareRows(pattern, row) {
     return allMirrored;
 }
 
+function compareColumns(pattern, col) {
+    let allMirrored = true;
+    const leftSideOfMirror = col;
+    const rightSideOfMirror = col + 1;
+    let leftSide = leftSideOfMirror +1;
+    let rightSide = pattern[0].length - rightSideOfMirror;
+    for (let i = 0; i < (leftSide > rightSide ? rightSide : leftSide) ; i++) {
+        // console.log(`Counting ${i} columns`);
+        // console.log(`Left: ${leftSide}, right ${rightSide}`);
+        if (pattern.map(row => row[leftSideOfMirror - i]).join('') === pattern.map(row => row[rightSideOfMirror + i]).join('')) {
+            // console.log(`Checking next.`);
+        } else if (pattern.map(row => row[leftSideOfMirror - i]).join('') !== pattern.map(row => row[rightSideOfMirror + i]).join('')) {
+            // console.log(`Not all rows are mirrored!`);
+            allMirrored = false;
+        }
+    }
+    return allMirrored;
+}
 
 function findMirroredColumn(pattern) {
     for (let col = 1; col < pattern[0].length; col++) {
         const currentColumn = pattern.map(row => row[col]).join('');
         const previousColumn = pattern.map(row => row[col - 1]).join('');
         if (currentColumn === previousColumn) {
-            console.log(`Mirror column is ${col - 1}`);
+            // console.log(`Mirror column is ${col - 1}`);
             return col - 1;
             // break;  // Add break to exit the loop once a mirrored column is found
         }
@@ -113,3 +127,22 @@ function findMirroredColumn(pattern) {
 }
 
 // findMirroredColumn(singlePattern)
+//
+// const testCols = [
+//   '1111111',
+//   '2222222',
+//   '3333333',
+//   '4444444',
+//   '5555555',
+//   '6666666',
+//   '0123321'
+// ]
+//
+// console.log(testCols.map(row => row[2]).join(''));
+
+// for (let col = 0; col < testCols[0].length; col++) {
+//     console.log(testCols.map(row => row[col]).join(''));
+// }
+
+
+console.log(`Final answer: ${(rowMirroredLines * multiplier) + colMirrorLine}`)
