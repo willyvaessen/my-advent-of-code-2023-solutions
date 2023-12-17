@@ -11,3 +11,8 @@ const INPUT = inputHelpers.readInputFile('./Day16_Input_Example');
 const caveMap = inputHelpers.createMap(INPUT);
 console.log(caveMap);
 // console.log(JSON.stringify(caveMap[0], null, 2));
+
+
+//  Setting up some variable, which I think I will need.
+let direction = 'rightward'     //  Initial direction. Other options: 'leftward', 'upward', 'downward'
+
