@@ -1,7 +1,7 @@
 //  First get the input:
 const fs = require('fs');
-const INPUT = fs.readFileSync('./Day5_Input', 'utf-8').split('\n');
-// const INPUT = fs.readFileSync('./Day5_Input_Example', 'utf-8').split('\n');
+// const INPUT = fs.readFileSync('./Day5_Input', 'utf-8').split('\n');
+const INPUT = fs.readFileSync('./Day5_Input_Example', 'utf-8').split('\n');
 // console.log(INPUT);  //  Just testing if INPUT logs correctly.
 
 //  Declaring consts for the various maps:
