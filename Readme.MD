@@ -55,34 +55,6 @@ With the addition of Jokers in the second part of the day.
 
 
 
-
-function handleJokers(hand) {
-    let joker = hand.J;
-    // console.log(hand);
-    if (joker === undefined) {
-        // console.log(`No Jokers in this hand.`);
-    } else {
-        // console.log(`Number of jokers in this hand is ${joker}`);
-        let maxCard = getHighestCountWithJokers(hand)[0];
-        let highestCount = getHighestCountWithJokers(hand)[1];
-        // console.log(maxCard, getHighestCountWithJokers);
-        // console.log("");
-        // console.log("|**----------**|");
-        // console.log(hand[maxCard]);
-        // console.log("|----------|");
-        // console.log(typeof hand.J);
-        // console.log(hand.J === 5);
-        if (!hand.J === 5) {
-            // console.log("*** Updating amount of highest card:")
-        hand[maxCard] += hand.J;
-        hand.J = 0;
-        delete hand['J'];
-        // console.log("|----------|");
-        // console.log(hand[maxCard]);
-        // console.log("|----------|");
-        }
-
-    }
-    console.log(hand);
-    return hand;
-}
+The end of december is near.
+I haven't really been able to finish a lot more puzzles, but I have learnt quite a lot in this month and I will learn
+lots more.
